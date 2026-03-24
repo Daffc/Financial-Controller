@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:17.5
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: financial_controller
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./infra/data/postgres:/var/lib/postgresql/data
+    networks:
+      - financial_controller_network
+      
+  api:
+    image: financial_controller_server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+      - ConnectionStrings__DefaultConnection=Host=db;Database=financial_controller;Username=postgres;Password=postgres
+    depends_on:
+      - db
+    networks:
+      - financial_controller_network
+
+  api_development:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    container_name: financial_controller_server_dev
+    volumes:
+      - ./api:/workspace
+    networks:
+      - financial_controller_network
+    depends_on:
+      - db
+    command: sleep infinity
+
+volumes:
+  postgres_db_data:
+
+networks:
+  financial_controller_network:
+    name: financial_controller_network
+    driver: bridge

@@ -1,9 +1,27 @@
+using NetEscapades.Extensions.Logging.RollingFile;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Logging in files only on production environment.
+if (builder.Environment.IsProduction())
+{
+    string logDirectory = builder.Configuration["Logging:LogDirectory"] ?? "Logs";
+    Directory.CreateDirectory(logDirectory);
+
+    builder.Logging.AddFile(options =>
+    {
+        options.Periodicity = PeriodicityOptions.Daily;
+        options.LogDirectory = logDirectory;
+        options.FileName = "financial_controller-";
+        options.Extension = ".log";
+        options.RetainedFileCountLimit = 7;
+    });
+}
 
 var app = builder.Build();
 

@@ -11,23 +11,6 @@ services:
       - ./infra/data/postgres:/var/lib/postgresql/data
     networks:
       - financial_controller_network
-      
-  api:
-    image: financial_controller_server
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5000
-      - ConnectionStrings__DefaultConnection=Host=db;Database=financial_controller;Username=postgres;Password=postgres
-    depends_on:
-      - db
-    networks:
-      - financial_controller_network
-
   api_development:
     image: mcr.microsoft.com/dotnet/sdk:8.0
     container_name: financial_controller_server_dev
@@ -35,9 +18,14 @@ services:
       - ./api:/workspace
     networks:
       - financial_controller_network
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
     depends_on:
       - db
-    command: sleep infinity
+    command: /bin/sh -c "cd /workspace && dotnet tool restore && dotnet watch run --no-launch-profile"
 
 volumes:
   postgres_db_data:

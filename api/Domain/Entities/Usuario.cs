@@ -14,4 +14,5 @@ public class Usuario
 
     // Navigation properties
     public virtual ICollection<Pessoa> Pessoas { get; private set; } = new List<Pessoa>();
+    public virtual ICollection<Categoria> Categorias { get; private set; } = new List<Categoria>();
 }

@@ -65,7 +65,7 @@ public class AppDbContext : DbContext
             // Relationships
             entity.HasOne(p => p.Usuario)
                 .WithMany(u => u.Pessoas)
-                .HasForeignKey(cr => cr.UsuarioId)
+                .HasForeignKey(p => p.UsuarioId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Indexes
@@ -76,18 +76,18 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Categoria>(entity =>
         {
             // Primary Key
-            entity.HasKey(p => p.Id);
+            entity.HasKey(c => c.Id);
 
             // Properties
-            entity.Property(p => p.Descricao)
+            entity.Property(c => c.Descricao)
                 .IsRequired()
                 .HasMaxLength(400);
 
-            entity.Property(p => p.Finalidade)
+            entity.Property(c => c.Finalidade)
                 .IsRequired()
                 .HasConversion<int>();
 
-            entity.Property(p => p.DataCriacao)
+            entity.Property(c => c.DataCriacao)
                 .IsRequired()
                 .HasColumnType("timestamp with time zone")
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -95,7 +95,7 @@ public class AppDbContext : DbContext
             // Relationships
             entity.HasOne(c => c.Usuario)
                 .WithMany(u => u.Categorias)
-                .HasForeignKey(cr => cr.UsuarioId)
+                .HasForeignKey(c => c.UsuarioId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Constraints

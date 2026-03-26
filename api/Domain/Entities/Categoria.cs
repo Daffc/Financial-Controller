@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Domain.Enums;
+using FinancialControllerServer.Domain.Enums;
 
-namespace Domain.Entities;
+namespace FinancialControllerServer.Domain.Entities;
 
 public class Categoria
 {

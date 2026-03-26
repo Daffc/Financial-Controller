@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entities;
+namespace FinancialControllerServer.Domain.Entities;
 
 public class Usuario
 {
@@ -16,4 +16,16 @@ public class Usuario
     public virtual ICollection<Pessoa> Pessoas { get; private set; } = new List<Pessoa>();
     public virtual ICollection<Categoria> Categorias { get; private set; } = new List<Categoria>();
     public virtual ICollection<Transacao> Transacoes { get; private set; } = new List<Transacao>();
+    public Usuario(string nome, string email, string senhaHash)
+    {
+        if (string.IsNullOrWhiteSpace(nome))
+            throw new Exception("Nome é obrigatório");
+
+        if (string.IsNullOrWhiteSpace(email))
+            throw new Exception("Email é obrigatório");
+
+        Nome = nome;
+        Email = email;
+        SenhaHash = senhaHash;
+    }
 }

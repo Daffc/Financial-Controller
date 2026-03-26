@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Domain.Entities;
+using FinancialControllerServer.Domain.Entities;
+
+namespace FinancialControllerServer.Infrastructure.Persistence;
 
 public class AppDbContext : DbContext
 {

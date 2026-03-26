@@ -1,11 +1,19 @@
 using NetEscapades.Extensions.Logging.RollingFile;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using FinancialControllerServer.Application.Common;
+using FinancialControllerServer.Application.Usuarios.CreateUsuario;
+using FinancialControllerServer.Application.Common.Interfaces;
+using FinancialControllerServer.Domain.Interfaces;
+using FinancialControllerServer.Infrastructure.Persistence;
+using FinancialControllerServer.Infrastructure.Services;
+using FinancialControllerServer.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
   
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 // Configuring Swagger documentation.
@@ -66,7 +74,15 @@ builder.Services
     .AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
     );
-    
+builder.Services
+    .Configure<SecurityOptions>(builder.Configuration.GetSection("Security"));
+
+// Application
+builder.Services
+    .AddScoped<CreateUsuarioHandler>()
+    .AddScoped<ISenhaHasher, SenhaHasher>()
+    .AddScoped<IUsuarioRepository, UsuarioRepository>();
+
 var app = builder.Build();
 
 // Enabling Swagger access only for Development environment.

@@ -1,0 +1,10 @@
+using FinancialControllerServer.Domain.Entities;
+
+namespace FinancialControllerServer.Domain.Interfaces;
+
+public interface IUsuarioRepository
+{
+    Task<bool> EmailExists(string email);
+    Task Create(Usuario usuario);
+    Task Save();
+}

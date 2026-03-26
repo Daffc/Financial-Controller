@@ -1,4 +1,4 @@
-namespace Domain.Enums;
+namespace FinancialControllerServer.Domain.Enums;
 
 public enum FinalidadeCategoria
 {

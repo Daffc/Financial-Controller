@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.Entities;
+namespace FinancialControllerServer.Domain.Entities;
 
 public class Pessoa
 {

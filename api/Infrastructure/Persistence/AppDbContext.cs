@@ -7,6 +7,7 @@ public class AppDbContext : DbContext
     public DbSet<Usuario> Usuarios { get; set; }
     public DbSet<Pessoa> Pessoas { get; set; }
     public DbSet<Categoria> Categorias { get; set; }
+    public DbSet<Transacao> Transacoes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -106,6 +107,61 @@ public class AppDbContext : DbContext
 
             // Indexes
             entity.HasIndex(u => u.UsuarioId)
+                .IsUnique();
+        });
+
+        modelBuilder.Entity<Transacao>(entity =>
+        {
+            // Primary Key
+            entity.HasKey(t => t.Id);
+
+            // Properties
+            entity.Property(t => t.Descricao)
+                .IsRequired()
+                .HasMaxLength(400);
+
+            entity.Property(t => t.Valor)
+                .IsRequired();
+
+            entity.Property(t => t.Tipo)
+                .IsRequired()
+                .HasConversion<int>();
+
+            entity.Property(t => t.DataCriacao)
+                .IsRequired()
+                .HasColumnType("timestamp with time zone")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            // Relationships
+            entity.HasOne(t => t.Usuario)
+                .WithMany(u => u.Transacoes)
+                .HasForeignKey(c => c.UsuarioId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(t => t.Pessoa)
+                .WithMany(p => p.Transacoes)
+                .HasForeignKey(c => c.PessoaId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(t => t.Categoria)
+                .WithMany(c => c.Transacoes)
+                .HasForeignKey(c => c.CategoriaId)
+                .OnDelete(DeleteBehavior.ClientNoAction);
+
+            // Constraints
+            entity.ToTable(t => t.HasCheckConstraint(
+                "CK_Transacao_Tipo_Valido",
+                "\"Tipo\" IN (1, 2)"
+            ));
+            entity.ToTable(t => t.HasCheckConstraint(
+                "CK_Transacao_Valor_Positiva",
+                "\"Valor\" > 0"
+            ));
+
+            // Indexes
+            entity.HasIndex(u => u.UsuarioId)
+                .IsUnique();
+            entity.HasIndex(u => u.PessoaId)
+                .IsUnique();
+            entity.HasIndex(u => u.CategoriaId)
                 .IsUnique();
         });
     }

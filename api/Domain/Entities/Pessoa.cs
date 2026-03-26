@@ -14,4 +14,5 @@ public class Pessoa
 
     // Navigation properties
     public Usuario? Usuario { get; private set; }
+    public virtual ICollection<Transacao> Transacoes { get; private set; } = new List<Transacao>();
 }

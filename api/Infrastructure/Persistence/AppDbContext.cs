@@ -70,8 +70,7 @@ public class AppDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Indexes
-            entity.HasIndex(u => u.UsuarioId)
-                .IsUnique();
+            entity.HasIndex(u => u.UsuarioId);
         });
 
         modelBuilder.Entity<Categoria>(entity =>
@@ -106,8 +105,7 @@ public class AppDbContext : DbContext
             ));
 
             // Indexes
-            entity.HasIndex(u => u.UsuarioId)
-                .IsUnique();
+            entity.HasIndex(u => u.UsuarioId);
         });
 
         modelBuilder.Entity<Transacao>(entity =>
@@ -157,12 +155,9 @@ public class AppDbContext : DbContext
             ));
 
             // Indexes
-            entity.HasIndex(u => u.UsuarioId)
-                .IsUnique();
-            entity.HasIndex(u => u.PessoaId)
-                .IsUnique();
-            entity.HasIndex(u => u.CategoriaId)
-                .IsUnique();
+            entity.HasIndex(u => u.UsuarioId);
+            entity.HasIndex(u => u.PessoaId);
+            entity.HasIndex(u => u.CategoriaId);
         });
     }
 }

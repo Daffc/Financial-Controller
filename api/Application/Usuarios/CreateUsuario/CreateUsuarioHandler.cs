@@ -1,5 +1,6 @@
 using FinancialControllerServer.Domain.Entities;
 using FinancialControllerServer.Domain.Interfaces;
+using FinancialControllerServer.Domain.Exceptions;
 using FinancialControllerServer.Application.Common.Interfaces;
 
 namespace FinancialControllerServer.Application.Usuarios.CreateUsuario;
@@ -19,7 +20,7 @@ public class CreateUsuarioHandler
     {
         var exists = await _usuarioRepository.EmailExists(request.Email);
         if (exists)
-            throw new Exception("Email já cadastrado");
+            throw new BadRequestException("Email já cadastrado");
 
         var senhaHash = _senhaHasher.Hash(request.Senha);
         var usuario = new Usuario(request.Nome, request.Email, senhaHash);

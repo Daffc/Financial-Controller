@@ -1,10 +1,13 @@
 using NetEscapades.Extensions.Logging.RollingFile;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using FinancialControllerServer.Api.Middlewares;
 using FinancialControllerServer.Application.Common;
 using FinancialControllerServer.Application.Usuarios.CreateUsuario;
 using FinancialControllerServer.Application.Common.Interfaces;
 using FinancialControllerServer.Domain.Interfaces;
+using FinancialControllerServer.Domain.Exceptions;
 using FinancialControllerServer.Infrastructure.Persistence;
 using FinancialControllerServer.Infrastructure.Services;
 using FinancialControllerServer.Infrastructure.Repositories;
@@ -69,6 +72,22 @@ if (builder.Environment.IsProduction())
     });
 }
 
+// Configuring Model Validadtion to use BadRequestException and GlobalExceptionHandlingMiddleware.
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errors = context.ModelState
+            .SelectMany(x => x.Value!.Errors)
+            .Select(e => e.ErrorMessage)
+            .ToList();
+
+        throw new BadRequestException(
+            "Erro de validação",
+            errors
+        );
+    }
+);
+
 // Infrastructure
 builder.Services
     .AddDbContext<AppDbContext>(options =>
@@ -97,5 +116,6 @@ if (app.Environment.IsProduction())
     app.UseHttpsRedirection();
 }
 
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.MapControllers();
 app.Run();

@@ -1,6 +1,6 @@
-namespace FinancialControllerServer.Application.Common;
+namespace FinancialControllerServer.Application.Common.Cryptography;
 
-public class SecurityOptions
+public class PasswordHashOptions
 {
     public string SenhaPepper { get; set; }
     public int DegreeOfParallelism { get; set; }

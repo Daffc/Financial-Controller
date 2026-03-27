@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using FinancialControllerServer.Api.Middlewares;
-using FinancialControllerServer.Application.Common;
-using FinancialControllerServer.Application.Common.Security;
 using FinancialControllerServer.Application.Auth.Login;
-using FinancialControllerServer.Application.Usuarios.CreateUsuario;
+using FinancialControllerServer.Application.Common.Cryptography;
 using FinancialControllerServer.Application.Common.Interfaces;
+using FinancialControllerServer.ApplicationCommon.Auth;
+using FinancialControllerServer.Application.Usuarios.CreateUsuario;
 using FinancialControllerServer.Domain.Interfaces;
 using FinancialControllerServer.Domain.Exceptions;
 using FinancialControllerServer.Infrastructure.Persistence;
@@ -125,7 +125,7 @@ builder.Services
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
     );
 builder.Services
-    .Configure<SecurityOptions>(builder.Configuration.GetSection("Security"));
+    .Configure<PasswordHashOptions>(builder.Configuration.GetSection("PasswordHash"));
 
 // Application
 builder.Services

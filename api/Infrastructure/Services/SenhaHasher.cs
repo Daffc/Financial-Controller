@@ -2,33 +2,33 @@ using System.Security.Cryptography;
 using System.Text;
 using Konscious.Security.Cryptography;
 using Microsoft.Extensions.Options;
+using FinancialControllerServer.Application.Common.Cryptography;
 using FinancialControllerServer.Application.Common.Interfaces;
-using FinancialControllerServer.Application.Common;
 
 namespace FinancialControllerServer.Infrastructure.Services;
 
 public class SenhaHasher : ISenhaHasher
 {
-    private readonly SecurityOptions _securityOptions;
+    private readonly PasswordHashOptions _passwordHashOptions;
 
-    public SenhaHasher(IOptions<SecurityOptions> securityOptions)
+    public SenhaHasher(IOptions<PasswordHashOptions> passwordHashOptions)
     {
-        _securityOptions = securityOptions.Value;
+        _passwordHashOptions = passwordHashOptions.Value;
     }
 
     public string Hash(string senha)
     {
-        var salt = RandomNumberGenerator.GetBytes(_securityOptions.SaltSize);
+        var salt = RandomNumberGenerator.GetBytes(_passwordHashOptions.SaltSize);
 
-        var argon2 = new Argon2id(Encoding.UTF8.GetBytes(senha + _securityOptions.SenhaPepper))
+        var argon2 = new Argon2id(Encoding.UTF8.GetBytes(senha + _passwordHashOptions.SenhaPepper))
         {
             Salt = salt,
-            DegreeOfParallelism = _securityOptions.DegreeOfParallelism,
-            Iterations = _securityOptions.Iterations,
-            MemorySize = _securityOptions.MemorySize
+            DegreeOfParallelism = _passwordHashOptions.DegreeOfParallelism,
+            Iterations = _passwordHashOptions.Iterations,
+            MemorySize = _passwordHashOptions.MemorySize
         };
 
-        var hash = argon2.GetBytes(_securityOptions.HashSize);
+        var hash = argon2.GetBytes(_passwordHashOptions.HashSize);
         
         return Convert.ToBase64String(salt) + "." + Convert.ToBase64String(hash);
     }
@@ -39,15 +39,15 @@ public class SenhaHasher : ISenhaHasher
         var salt = Convert.FromBase64String(parts[0]);
         var storedHash = parts[1];
 
-        var argon2 = new Argon2id(Encoding.UTF8.GetBytes(senha + _securityOptions.SenhaPepper))
+        var argon2 = new Argon2id(Encoding.UTF8.GetBytes(senha + _passwordHashOptions.SenhaPepper))
         {
             Salt = salt,
-            DegreeOfParallelism = _securityOptions.DegreeOfParallelism,
-            Iterations = _securityOptions.Iterations,
-            MemorySize = _securityOptions.MemorySize
+            DegreeOfParallelism = _passwordHashOptions.DegreeOfParallelism,
+            Iterations = _passwordHashOptions.Iterations,
+            MemorySize = _passwordHashOptions.MemorySize
         };
 
-        var computedHash = Convert.ToBase64String(argon2.GetBytes(_securityOptions.HashSize));
+        var computedHash = Convert.ToBase64String(argon2.GetBytes(_passwordHashOptions.HashSize));
 
         return CryptographicOperations.FixedTimeEquals(
             Convert.FromBase64String(computedHash),

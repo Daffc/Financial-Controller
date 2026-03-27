@@ -29,9 +29,6 @@ public sealed class UsuarioController : ControllerBase
     [SwaggerResponse(StatusCodes.Status200OK, "Usuario criado", typeof(CreateUsuarioResponse))]
     public async Task<IActionResult> Create ([FromBody] CreateUsuarioRequest request)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
         var result = await _createUsuarioHandler.Handle(request);
         return Ok(result);
     }

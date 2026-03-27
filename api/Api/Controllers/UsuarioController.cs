@@ -27,6 +27,9 @@ public sealed class UsuarioController : ControllerBase
                     "- 1 número\n" +
                     "- 1 caractere especial")]
     [SwaggerResponse(StatusCodes.Status200OK, "Usuario criado", typeof(CreateUsuarioResponse))]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Erro de validação", typeof(ApiErrorResponse))]
+    [SwaggerResponse(StatusCodes.Status409Conflict, "Email já cadastrado", typeof(ApiErrorResponse))]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor", typeof(ApiErrorResponse))]
     public async Task<IActionResult> Create ([FromBody] CreateUsuarioRequest request)
     {
         var result = await _createUsuarioHandler.Handle(request);

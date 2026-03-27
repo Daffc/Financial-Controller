@@ -20,7 +20,7 @@ public class CreateUsuarioHandler
     {
         var exists = await _usuarioRepository.EmailExists(request.Email);
         if (exists)
-            throw new BadRequestException("Email já cadastrado");
+            throw new ConflictException("Email já cadastrado");
 
         var senhaHash = _senhaHasher.Hash(request.Senha);
         var usuario = new Usuario(request.Nome, request.Email, senhaHash);

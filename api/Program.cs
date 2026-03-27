@@ -1,9 +1,14 @@
+using System.Text;
 using NetEscapades.Extensions.Logging.RollingFile;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using FinancialControllerServer.Api.Middlewares;
 using FinancialControllerServer.Application.Common;
+using FinancialControllerServer.Application.Common.Security;
+using FinancialControllerServer.Application.Auth.Login;
 using FinancialControllerServer.Application.Usuarios.CreateUsuario;
 using FinancialControllerServer.Application.Common.Interfaces;
 using FinancialControllerServer.Domain.Interfaces;
@@ -13,7 +18,7 @@ using FinancialControllerServer.Infrastructure.Services;
 using FinancialControllerServer.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-  
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
@@ -88,6 +93,32 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     }
 );
 
+// Registering JWT configuration.
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+
+// Setting JWT as the default authentication mechanism
+var jwtOptions = builder.Configuration.GetSection("Jwt").Get<JwtOptions>();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateIssuerSigningKey = true,
+        ValidateLifetime = true,
+
+        ValidIssuer = jwtOptions.Issuer,
+        ValidAudience = jwtOptions.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(jwtOptions.Key))
+    };
+});
+
 // Infrastructure
 builder.Services
     .AddDbContext<AppDbContext>(options =>
@@ -99,7 +130,9 @@ builder.Services
 // Application
 builder.Services
     .AddScoped<CreateUsuarioHandler>()
+    .AddScoped<LoginHandler>()
     .AddScoped<ISenhaHasher, SenhaHasher>()
+    .AddScoped<ITokenService, TokenService>()
     .AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 var app = builder.Build();
@@ -116,6 +149,8 @@ if (app.Environment.IsProduction())
     app.UseHttpsRedirection();
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.MapControllers();
 app.Run();

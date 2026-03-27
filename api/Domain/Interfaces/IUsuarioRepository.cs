@@ -7,4 +7,5 @@ public interface IUsuarioRepository
     Task<bool> EmailExists(string email);
     Task Create(Usuario usuario);
     Task Save();
+    Task<Usuario> GetByEmail(string email);
 }

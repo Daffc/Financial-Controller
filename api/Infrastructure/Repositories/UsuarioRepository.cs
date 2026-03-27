@@ -28,4 +28,11 @@ public class UsuarioRepository : IUsuarioRepository
     {
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task <Usuario> GetByEmail(string email)
+    {
+        return await _dbContext.Usuarios
+            .Where(u => u.Email == email)
+            .FirstOrDefaultAsync();
+    }
 }

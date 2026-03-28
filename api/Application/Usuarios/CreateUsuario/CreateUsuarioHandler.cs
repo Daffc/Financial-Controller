@@ -18,12 +18,12 @@ public class CreateUsuarioHandler
 
     public async Task<CreateUsuarioResponse> Handle(CreateUsuarioRequest request)
     {
-        var exists = await _usuarioRepository.EmailExists(request.Email);
+        var exists = await _usuarioRepository.EmailExists(request.Email!);
         if (exists)
             throw new ConflictException("Email já cadastrado");
 
-        var senhaHash = _senhaHasher.Hash(request.Senha);
-        var usuario = new Usuario(request.Nome, request.Email, senhaHash);
+        var senhaHash = _senhaHasher.Hash(request.Senha!);
+        var usuario = new Usuario(request.Nome!, request.Email!, senhaHash);
 
         await _usuarioRepository.Create(usuario);
         await _usuarioRepository.Save();

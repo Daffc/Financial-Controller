@@ -22,7 +22,7 @@ public class CreatePessoaHandler
             throw new NotFoundException("Usuário não encontrado");
 
         var pessoa = new Pessoa(
-            request.Nome,
+            request.Nome!,
             request.Idade!.Value,
             usuarioId
         );

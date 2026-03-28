@@ -21,12 +21,12 @@ public class LoginHandler
 
     public async Task<LoginResponse> Handle(LoginRequest request)
     {
-        var usuario = await _usuarioRepository.GetByEmail(request.Email);
+        var usuario = await _usuarioRepository.GetByEmail(request.Email!);
 
         if(usuario is null)
             throw new BadRequestException("Credenciais inválidas");
 
-        var valid = _senhaHasher.Verify(request.Senha, usuario.SenhaHash);
+        var valid = _senhaHasher.Verify(request.Senha!, usuario.SenhaHash);
 
         if (!valid)
             throw new BadRequestException("Credenciais inválidas");

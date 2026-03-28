@@ -13,6 +13,7 @@ using FinancialControllerServer.Application.Common.Interfaces;
 using FinancialControllerServer.Application.Common.Auth;
 using FinancialControllerServer.Application.Usuarios.CreateUsuario;
 using FinancialControllerServer.Application.Pessoas.CreatePessoa;
+using FinancialControllerServer.Application.Pessoas.ListPessoas;
 using FinancialControllerServer.Domain.Interfaces;
 using FinancialControllerServer.Domain.Exceptions;
 using FinancialControllerServer.Infrastructure.Persistence;
@@ -101,13 +102,13 @@ builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 // Setting JWT as the default authentication mechanism
 var jwtSection = builder.Configuration.GetSection("Jwt");
 
-var key = jwtSection["Key"] 
+var key = jwtSection["Key"]
     ?? throw new InvalidOperationException("JWT Key is missing");
 
-var issuer = jwtSection["Issuer"] 
+var issuer = jwtSection["Issuer"]
     ?? throw new InvalidOperationException("JWT Issuer is missing");
 
-var audience = jwtSection["Audience"] 
+var audience = jwtSection["Audience"]
     ?? throw new InvalidOperationException("JWT Audience is missing");
 
 builder.Services.AddAuthentication(options =>
@@ -181,6 +182,7 @@ builder.Services
     .AddScoped<CreateUsuarioHandler>()
     .AddScoped<LoginHandler>()
     .AddScoped<CreatePessoaHandler>()
+    .AddScoped<ListPessoasHandler>()
     .AddScoped<ISenhaHasher, SenhaHasher>()
     .AddScoped<ITokenService, TokenService>()
     .AddScoped<IUsuarioRepository, UsuarioRepository>()

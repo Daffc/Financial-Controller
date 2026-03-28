@@ -23,4 +23,12 @@ public class PessoaRepository : IPessoaRepository
     {
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task<List<Pessoa>> ListByUsuarioId(Guid usuarioId)
+    {
+        return await _dbContext.Pessoas
+            .Where(p => p.UsuarioId == usuarioId)
+            .OrderBy(p => p.Nome)
+            .ToListAsync();
+    }
 }

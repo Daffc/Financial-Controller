@@ -20,7 +20,7 @@ public class SenhaHasher : ISenhaHasher
     {
         var salt = RandomNumberGenerator.GetBytes(_passwordHashOptions.SaltSize);
 
-        var argon2 = new Argon2id(Encoding.UTF8.GetBytes(senha + _passwordHashOptions.SenhaPepper))
+        var argon2 = new Argon2id(Encoding.UTF8.GetBytes(senha + _passwordHashOptions.Pepper))
         {
             Salt = salt,
             DegreeOfParallelism = _passwordHashOptions.DegreeOfParallelism,
@@ -39,7 +39,7 @@ public class SenhaHasher : ISenhaHasher
         var salt = Convert.FromBase64String(parts[0]);
         var storedHash = parts[1];
 
-        var argon2 = new Argon2id(Encoding.UTF8.GetBytes(senha + _passwordHashOptions.SenhaPepper))
+        var argon2 = new Argon2id(Encoding.UTF8.GetBytes(senha + _passwordHashOptions.Pepper))
         {
             Salt = salt,
             DegreeOfParallelism = _passwordHashOptions.DegreeOfParallelism,

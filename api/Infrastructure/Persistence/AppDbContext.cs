@@ -61,8 +61,8 @@ public class AppDbContext : DbContext
 
             // Constraints
             entity.ToTable(t => t.HasCheckConstraint(
-                "CK_Pessoa_Idade_Positiva",
-                "\"Idade\" > 0"
+                "CK_Pessoa_Idade",
+                "\"Idade\" >= 0 AND \"Idade\" <= 150"
             ));
 
             // Relationships

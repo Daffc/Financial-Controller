@@ -6,8 +6,8 @@ public class LoginRequest
 {
     [Required(ErrorMessage = "Email é obrigatório")]
     [EmailAddress(ErrorMessage = "Formato de email inválido")]
-    public required string Email { get; set; }
+    public string? Email { get; set; }
 
     [Required(ErrorMessage = "Senha é obrigatória")]
-    public required string Senha { get; set; }
+    public string? Senha { get; set; }
 }

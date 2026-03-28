@@ -51,7 +51,7 @@ public class GlobalExceptionHandlingMiddleware
                 statusCode = StatusCodes.Status500InternalServerError;
                 message = "Erro interno do servidor.";
                 traceId = context.TraceIdentifier;
-                errors = null;
+                errors = [];
                 _logger.LogError(ex,
                     "Unhandled exception on {Method} {Path} | TraceId: {TraceId}",
                     context.Request.Method,

@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
-using FinancialControllerServer.ApplicationCommon.Auth;
+using FinancialControllerServer.Application.Common.Auth;
 using FinancialControllerServer.Application.Common.Interfaces;
 using FinancialControllerServer.Infrastructure.Services;
 using FinancialControllerServer.Domain.Entities;

@@ -1,4 +1,5 @@
-namespace FinancialControllerServer.ApplicationCommon.Auth;
+namespace FinancialControllerServer.Application.Common.Auth;
+
 public class JwtOptions
 {
     public required string Key { get; set; }

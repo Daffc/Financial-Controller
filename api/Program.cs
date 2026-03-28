@@ -9,7 +9,7 @@ using FinancialControllerServer.Api.Middlewares;
 using FinancialControllerServer.Application.Auth.Login;
 using FinancialControllerServer.Application.Common.Cryptography;
 using FinancialControllerServer.Application.Common.Interfaces;
-using FinancialControllerServer.ApplicationCommon.Auth;
+using FinancialControllerServer.Application.Common.Auth;
 using FinancialControllerServer.Application.Usuarios.CreateUsuario;
 using FinancialControllerServer.Domain.Interfaces;
 using FinancialControllerServer.Domain.Exceptions;

@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json;
 using NetEscapades.Extensions.Logging.RollingFile;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using FinancialControllerServer.Application.Common.Cryptography;
 using FinancialControllerServer.Application.Common.Interfaces;
 using FinancialControllerServer.Application.Common.Auth;
 using FinancialControllerServer.Application.Usuarios.CreateUsuario;
+using FinancialControllerServer.Application.Pessoas.CreatePessoa;
 using FinancialControllerServer.Domain.Interfaces;
 using FinancialControllerServer.Domain.Exceptions;
 using FinancialControllerServer.Infrastructure.Persistence;
@@ -127,6 +129,43 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(key))
     };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnChallenge = context =>
+        {
+            context.HandleResponse();
+
+            var response = new ApiErrorResponse
+            {
+                Message = "Não autenticado",
+                Errors = new List<string>(),
+                TraceId = context.HttpContext.TraceIdentifier
+            };
+
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            context.Response.ContentType = "application/json";
+
+            var json = JsonSerializer.Serialize(response);
+            return context.Response.WriteAsync(json);
+        },
+
+        OnForbidden = context =>
+        {
+            var response = new ApiErrorResponse
+            {
+                Message = "Acesso negado",
+                Errors = new List<string>(),
+                TraceId = context.HttpContext.TraceIdentifier
+            };
+
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            context.Response.ContentType = "application/json";
+
+            var json = JsonSerializer.Serialize(response);
+            return context.Response.WriteAsync(json);
+        }
+    };
 });
 
 // Infrastructure
@@ -141,9 +180,11 @@ builder.Services
 builder.Services
     .AddScoped<CreateUsuarioHandler>()
     .AddScoped<LoginHandler>()
+    .AddScoped<CreatePessoaHandler>()
     .AddScoped<ISenhaHasher, SenhaHasher>()
     .AddScoped<ITokenService, TokenService>()
-    .AddScoped<IUsuarioRepository, UsuarioRepository>();
+    .AddScoped<IUsuarioRepository, UsuarioRepository>()
+    .AddScoped<IPessoaRepository, PessoaRepository>();
 
 var app = builder.Build();
 

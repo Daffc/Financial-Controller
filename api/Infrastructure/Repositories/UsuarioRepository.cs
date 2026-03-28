@@ -14,7 +14,7 @@ public class UsuarioRepository : IUsuarioRepository
         _dbContext = dbContext;
     }
 
-    public async Task <bool> EmailExists(string email)
+    public async Task<bool> EmailExists(string email)
     {
         return await _dbContext.Usuarios.AnyAsync(x => x.Email == email);
     }
@@ -22,17 +22,23 @@ public class UsuarioRepository : IUsuarioRepository
     public async Task Create(Usuario usuario)
     {
         await _dbContext.Usuarios.AddAsync(usuario);
-    } 
+    }
 
     public async Task Save()
     {
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task <Usuario?> GetByEmail(string email)
+    public async Task<Usuario?> GetByEmail(string email)
     {
         return await _dbContext.Usuarios
             .Where(u => u.Email == email)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<Usuario?> GetById(Guid id)
+    {
+        return await _dbContext.Usuarios
+            .FirstOrDefaultAsync(u => u.Id == id);
     }
 }

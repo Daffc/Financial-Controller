@@ -8,4 +8,5 @@ public interface IUsuarioRepository
     Task Create(Usuario usuario);
     Task Save();
     Task<Usuario?> GetByEmail(string email);
+    Task<Usuario?> GetById(Guid id);
 }

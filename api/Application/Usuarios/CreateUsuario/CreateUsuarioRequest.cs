@@ -5,7 +5,7 @@ namespace FinancialControllerServer.Application.Usuarios.CreateUsuario;
 public class CreateUsuarioRequest
 {
     [Required(ErrorMessage = "Nome é obrigatório")]
-    [StringLength(200, MinimumLength = 8, ErrorMessage = "Nome deve conter entre 8 e 200 caracteres")]
+    [StringLength(200, MinimumLength = 1, ErrorMessage = "Nome deve conter entre 1 e 200 caracteres")]
     public string? Nome { get; set; }
 
     [Required(ErrorMessage = "Email é obrigatório")]

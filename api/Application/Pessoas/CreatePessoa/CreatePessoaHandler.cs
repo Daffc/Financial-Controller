@@ -23,7 +23,7 @@ public class CreatePessoaHandler
 
         var pessoa = new Pessoa(
             request.Nome,
-            request.Idade,
+            request.Idade!.Value,
             usuarioId
         );
 

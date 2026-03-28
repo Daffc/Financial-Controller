@@ -1,6 +1,6 @@
 public class ApiErrorResponse
 {
-    public string Message { get; set; }
-    public List<string> Errors { get; set; }
-    public string TraceId { get; set; }
+    public required string Message { get; set; }
+    public required List<string> Errors { get; set; }
+    public required string TraceId { get; set; }
 }

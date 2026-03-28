@@ -97,7 +97,17 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
 
 // Setting JWT as the default authentication mechanism
-var jwtOptions = builder.Configuration.GetSection("Jwt").Get<JwtOptions>();
+var jwtSection = builder.Configuration.GetSection("Jwt");
+
+var key = jwtSection["Key"] 
+    ?? throw new InvalidOperationException("JWT Key is missing");
+
+var issuer = jwtSection["Issuer"] 
+    ?? throw new InvalidOperationException("JWT Issuer is missing");
+
+var audience = jwtSection["Audience"] 
+    ?? throw new InvalidOperationException("JWT Audience is missing");
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -112,10 +122,10 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidateLifetime = true,
 
-        ValidIssuer = jwtOptions.Issuer,
-        ValidAudience = jwtOptions.Audience,
+        ValidIssuer = issuer,
+        ValidAudience = audience,
         IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(jwtOptions.Key))
+            Encoding.UTF8.GetBytes(key))
     };
 });
 

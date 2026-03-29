@@ -22,8 +22,8 @@ public class Pessoa
         if (string.IsNullOrWhiteSpace(nome))
             throw new BadRequestException("Nome é obrigatório");
 
-    if (idade < 0 || idade > 150)
-        throw new BadRequestException("Idade inválida");
+        if (idade < 0 || idade > 150)
+            throw new BadRequestException("Idade inválida");
 
         Nome = nome;
         Idade = idade;

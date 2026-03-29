@@ -41,7 +41,7 @@ public sealed class PessoaController : ControllerBase
 
     [HttpGet]
     [SwaggerOperation(Summary = "Lista Pessoas atreladas a Usuario")]
-    [SwaggerResponse(StatusCodes.Status200OK, "Lista recuperada", typeof(ListPessoasResponse))]
+    [SwaggerResponse(StatusCodes.Status200OK, "Lista recuperada", typeof(List<ListPessoasResponse>))]
     [SwaggerResponse(StatusCodes.Status400BadRequest, "Erro de validação", typeof(ApiErrorResponse))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, "Não autenticado", typeof(ApiErrorResponse))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor", typeof(ApiErrorResponse))]

@@ -23,4 +23,12 @@ public class TransacaoRepository : ITransacaoRepository
     {
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task<List<Transacao>> ListByUsuarioId(Guid usuarioId)
+    {
+        return await _dbContext.Transacoes
+            .Where(t => t.UsuarioId == usuarioId)
+            .OrderByDescending(t => t.DataCriacao)
+            .ToListAsync();
+    }
 }

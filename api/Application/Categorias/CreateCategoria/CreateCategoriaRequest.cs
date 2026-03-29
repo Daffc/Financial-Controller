@@ -11,6 +11,6 @@ public class CreateCategoriaRequest
     public string? Descricao { get; set; }
 
     [Required(ErrorMessage = "Finalidade é obrigatória")]
-    [Range(1, 3, ErrorMessage = "Finalidade inválida")]
+    [EnumDataType(typeof(FinalidadeCategoria), ErrorMessage = "Finalidade inválida")]
     public FinalidadeCategoria? Finalidade { get; set; }
 }

@@ -17,6 +17,7 @@ using FinancialControllerServer.Application.Usuarios.CreateUsuario;
 using FinancialControllerServer.Application.Pessoas.CreatePessoa;
 using FinancialControllerServer.Application.Pessoas.ListPessoas;
 using FinancialControllerServer.Application.Pessoas.DeletePessoa;
+using FinancialControllerServer.Application.Transacoes.CreateTransacao;
 using FinancialControllerServer.Domain.Interfaces;
 using FinancialControllerServer.Domain.Exceptions;
 using FinancialControllerServer.Infrastructure.Persistence;
@@ -189,11 +190,13 @@ builder.Services
     .AddScoped<CreatePessoaHandler>()
     .AddScoped<ListPessoasHandler>()
     .AddScoped<DeletePessoaHandler>()
+    .AddScoped<CreateTransacaoHandler>()
     .AddScoped<ISenhaHasher, SenhaHasher>()
     .AddScoped<ITokenService, TokenService>()
     .AddScoped<ICategoriaRepository, CategoriaRepository>()
     .AddScoped<IUsuarioRepository, UsuarioRepository>()
-    .AddScoped<IPessoaRepository, PessoaRepository>();
+    .AddScoped<IPessoaRepository, PessoaRepository>()
+    .AddScoped<ITransacaoRepository, TransacaoRepository>();
 
 var app = builder.Build();
 

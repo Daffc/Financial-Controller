@@ -31,4 +31,10 @@ public class CategoriaRepository : ICategoriaRepository
             .OrderBy(p => p.Descricao)
             .ToListAsync();
     }
+
+    public async Task<Categoria?> GetByIdAndUsuarioId(Guid categoriaId, Guid usuarioId)
+    {
+        return await _dbContext.Categorias
+            .FirstOrDefaultAsync(c => c.Id == categoriaId && c.UsuarioId == usuarioId);
+    }
 }

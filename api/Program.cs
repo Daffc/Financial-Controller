@@ -12,6 +12,7 @@ using FinancialControllerServer.Application.Common.Cryptography;
 using FinancialControllerServer.Application.Common.Interfaces;
 using FinancialControllerServer.Application.Common.Auth;
 using FinancialControllerServer.Application.Categorias.CreateCategoria;
+using FinancialControllerServer.Application.Categorias.ListCategorias;
 using FinancialControllerServer.Application.Usuarios.CreateUsuario;
 using FinancialControllerServer.Application.Pessoas.CreatePessoa;
 using FinancialControllerServer.Application.Pessoas.ListPessoas;
@@ -183,6 +184,7 @@ builder.Services
     .AddScoped<CreateUsuarioHandler>()
     .AddScoped<LoginHandler>()
     .AddScoped<CreateCategoriaHandler>()
+    .AddScoped<ListCategoriasHandler>()
     .AddScoped<CreatePessoaHandler>()
     .AddScoped<ListPessoasHandler>()
     .AddScoped<ISenhaHasher, SenhaHasher>()

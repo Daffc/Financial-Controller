@@ -6,4 +6,5 @@ public interface ICategoriaRepository
 {
     Task Create(Categoria categoria);
     Task Save();
+    Task<List<Categoria>> ListByUsuarioId(Guid usuarioId);
 }

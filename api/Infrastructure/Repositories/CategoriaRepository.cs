@@ -23,4 +23,12 @@ public class CategoriaRepository : ICategoriaRepository
     {
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task<List<Categoria>> ListByUsuarioId(Guid usuarioId)
+    {
+        return await _dbContext.Categorias
+            .Where(p => p.UsuarioId == usuarioId)
+            .OrderBy(p => p.Descricao)
+            .ToListAsync();
+    }
 }

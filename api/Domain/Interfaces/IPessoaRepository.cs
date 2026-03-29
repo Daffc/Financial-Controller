@@ -7,4 +7,6 @@ public interface IPessoaRepository
     Task Create(Pessoa pessoa);
     Task Save();
     Task<List<Pessoa>> ListByUsuarioId(Guid usuarioId);
+    Task<Pessoa?> GetByIdAndUsuarioId(Guid pessoaId, Guid usuarioId);
+    void Delete(Pessoa pessoa);
 }

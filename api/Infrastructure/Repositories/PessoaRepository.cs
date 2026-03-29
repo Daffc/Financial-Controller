@@ -31,4 +31,17 @@ public class PessoaRepository : IPessoaRepository
             .OrderBy(p => p.Nome)
             .ToListAsync();
     }
+
+    public async Task<Pessoa?> GetByIdAndUsuarioId(Guid pessoaId, Guid usuarioId)
+    {
+        return await _dbContext.Pessoas
+            .FirstOrDefaultAsync(p => p.Id == pessoaId && p.UsuarioId == usuarioId);
+    }
+
+    public void Delete(Pessoa pessoa)
+    {
+        _dbContext.Pessoas
+            .Remove(pessoa);
+    }
+
 }

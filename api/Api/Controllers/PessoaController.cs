@@ -4,6 +4,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using FinancialControllerServer.Api.Common.Extensions;
 using FinancialControllerServer.Application.Pessoas.CreatePessoa;
 using FinancialControllerServer.Application.Pessoas.ListPessoas;
+using FinancialControllerServer.Application.Pessoas.DeletePessoa;
 
 namespace FinancialControllerServer.Api.Controllers;
 
@@ -16,11 +17,13 @@ public sealed class PessoaController : ControllerBase
 {
     private readonly CreatePessoaHandler _createPessoaHandler;
     private readonly ListPessoasHandler _listPessoasHandler;
+    private readonly DeletePessoaHandler _deletePessoaHandler;
 
-    public PessoaController(CreatePessoaHandler createPessoaHandler, ListPessoasHandler listPessoasHandler)
+    public PessoaController(CreatePessoaHandler createPessoaHandler, ListPessoasHandler listPessoasHandler, DeletePessoaHandler deletePessoaHandler)
     {
         _createPessoaHandler = createPessoaHandler;
         _listPessoasHandler = listPessoasHandler;
+        _deletePessoaHandler = deletePessoaHandler;
     }
 
     [HttpPost]
@@ -47,5 +50,18 @@ public sealed class PessoaController : ControllerBase
         var usuarioId = User.GetUserId();
         var result = await _listPessoasHandler.Handle(usuarioId);
         return Ok(result);
+    }
+
+    [HttpDelete("{id:guid}")]
+    [SwaggerOperation(Summary = "Remove uma Pessoa")]
+    [SwaggerResponse(StatusCodes.Status204NoContent, "Pessoa removida")]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, "Não autenticado", typeof(ApiErrorResponse))]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "Pessoa não encontrada", typeof(ApiErrorResponse))]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor", typeof(ApiErrorResponse))]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var usuarioId = User.GetUserId();
+        await _deletePessoaHandler.Handle(id, usuarioId);
+        return NoContent();
     }
 }

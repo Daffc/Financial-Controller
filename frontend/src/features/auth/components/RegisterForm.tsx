@@ -1,38 +1,31 @@
 
-import { useState } from "react";
-import { login } from "../login-api";
-import { useAuth } from "../../../app/auth-provider";
-import { useNavigate } from "react-router-dom";
+import { register } from "../register-api";
 import {
     Button,
     Stack,
     TextField
 } from "@mui/material";
-import { extractApiError } from "../../../api/interceptors";
 import { useToast } from "../../../app/feedback-provider";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginUsuarioSchema, type LoginUsuarioFormData } from "../validation/login-usuario-schema";
+import { extractApiError } from "../../../api/interceptors";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { registerUsuarioSchema, type RegisterUsuarioFormData } from "../validation/register-usuario-schema";
 
-export function LoginForm() {
+export function RegisterForm({ setTab }: any) {
     const { showToast } = useToast();
-    const { login: setAuth } = useAuth();
-    const navigate = useNavigate();
-
     const {
-        register: formLogin,
+        register: formRegister,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm<LoginUsuarioFormData>({
-        resolver: zodResolver(loginUsuarioSchema)
-    })
+    } = useForm<RegisterUsuarioFormData>({
+        resolver: zodResolver(registerUsuarioSchema),
+    });
 
-    async function onSubmit(data: LoginUsuarioFormData) {
+    async function onSubmit(data: RegisterUsuarioFormData) {
         try {
-            const res = await login(data);
-            setAuth(res.token);
-            showToast("Login realizado com sucesso", "success");
-            navigate("/");
+            await register(data);
+            showToast("Usuário cadastrado com sucesso", "success");
+            setTab(0);
         } catch (err: any) {
             const msg = extractApiError(err);
             showToast(msg, "error");
@@ -40,12 +33,18 @@ export function LoginForm() {
     }
 
     return (
-
         <Stack spacing={2} mt={2}>
+            <TextField
+                label="Nome"
+                fullWidth
+                {...formRegister("nome")}
+                error={!!errors.nome}
+                helperText={errors.nome?.message}
+            />
             <TextField
                 label="Email"
                 fullWidth
-                {...formLogin("email")}
+                {...formRegister("email")}
                 error={!!errors.email}
                 helperText={errors.email?.message}
             />
@@ -53,7 +52,7 @@ export function LoginForm() {
                 label="Senha"
                 type="password"
                 fullWidth
-                {...formLogin("senha")}
+                {...formRegister("senha")}
                 error={!!errors.senha}
                 helperText={errors.senha?.message}
             />
@@ -63,7 +62,7 @@ export function LoginForm() {
                 onClick={handleSubmit(onSubmit)}
                 disabled={isSubmitting}
             >
-                {isSubmitting ? "Entrando..." : "Entrar"}
+                {isSubmitting ? "Cadastrando..." : "Cadastrar"}
             </Button>
         </Stack>
     )

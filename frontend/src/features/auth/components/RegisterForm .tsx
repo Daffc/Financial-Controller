@@ -6,8 +6,11 @@ import {
     Stack,
     TextField
 } from "@mui/material";
+import { useToast } from "../../../app/feedback-provider";
+import { extractApiError } from "../../../api/interceptors";
 
 export function RegisterForm({ setTab }: any) {
+    const { showToast } = useToast();
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
@@ -21,12 +24,11 @@ export function RegisterForm({ setTab }: any) {
                 email,
                 senha
             })
-
-            alert("Usuário criado com sucesso!");
-
+            showToast("Usuário cadastrado com sucesso", "success");
             setTab(0);
-        } catch {
-            alert("Erro ao cadastrar usuário");
+        } catch (err: any) {
+            const msg = extractApiError(err);
+            showToast(msg, "error");
         } finally {
             setLoading(false);
         }

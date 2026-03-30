@@ -3,13 +3,16 @@ import { useState } from "react";
 import { login } from "../login-api";
 import { useAuth } from "../../../app/auth-provider";
 import { useNavigate } from "react-router-dom";
-import { 
+import {
     Button,
-    Stack, 
-    TextField 
+    Stack,
+    TextField
 } from "@mui/material";
+import { extractApiError } from "../../../api/interceptors";
+import { useToast } from "../../../app/feedback-provider";
 
 export function LoginForm() {
+    const { showToast } = useToast();
     const { login: setAuth } = useAuth();
     const navigate = useNavigate();
 
@@ -22,9 +25,11 @@ export function LoginForm() {
             setLoading(true);
             const res = await login({ email, senha });
             setAuth(res.token);
+            showToast("Login realizado com sucesso", "success");
             navigate("/");
-        } catch {
-            alert("Credenciais inválidas");
+        } catch (err: any) {
+            const msg = extractApiError(err);
+            showToast(msg, "error");
         } finally {
             setLoading(false);
         }
@@ -33,13 +38,13 @@ export function LoginForm() {
     return (
 
         <Stack spacing={2} mt={2}>
-            <TextField 
-                label= "Email"
+            <TextField
+                label="Email"
                 fullWidth
                 onChange={(e) => setEmail(e.target.value)}
             />
-            <TextField 
-                label= "Senha"
+            <TextField
+                label="Senha"
                 type="password"
                 fullWidth
                 onChange={(e) => setSenha(e.target.value)}

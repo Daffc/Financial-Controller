@@ -1,5 +1,28 @@
 import { api } from "./axios";
 
+
+interface ApiErrorResponse {
+  message?: string;
+  errors?: string[];
+  traceId?: string;
+}
+
+export function extractApiError(error: any): string {
+  const data: ApiErrorResponse = error?.response?.data;
+
+  let msg = data.message || "Erro desconhecido";
+
+  if (data.errors && data.errors.length > 0) {
+    msg += ":\n" + data.errors.map(e => `  • ${e}`).join("\n");
+  }
+
+  if (data.errors && data.errors.length > 0) {
+    msg += `\nTraceId: ${data.traceId}`;
+  }
+
+  return msg;
+}
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
 

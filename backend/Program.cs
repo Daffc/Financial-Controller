@@ -69,6 +69,33 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+
+// CORS Configuration
+var allowedOrigins = builder.Configuration
+    .GetSection("Cors:AllowedOrigins")
+    .Get<string[]>() ?? Array.Empty<string>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", policy =>
+    {
+        if (builder.Environment.IsDevelopment())
+        {
+            policy
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        }
+        else
+        {
+            policy
+                .WithOrigins(allowedOrigins ?? Array.Empty<string>())
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        }
+    });
+});
+
 // Logging to files only in the production environment.
 if (builder.Environment.IsProduction())
 {
@@ -214,6 +241,7 @@ if (app.Environment.IsProduction())
     app.UseHttpsRedirection();
 }
 
+app.UseCors("CorsPolicy");
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();

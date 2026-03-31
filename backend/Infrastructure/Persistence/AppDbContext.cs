@@ -127,6 +127,10 @@ public class AppDbContext : DbContext
                 .IsRequired()
                 .HasConversion<int>();
 
+            entity.Property(t => t.Data)
+                .HasColumnType("date")
+                .IsRequired();
+
             entity.Property(t => t.DataCriacao)
                 .IsRequired()
                 .HasColumnType("timestamp with time zone")

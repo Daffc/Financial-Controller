@@ -8,5 +8,6 @@ public class CreateTransacaoResponse
     public Guid Id { get; set; }
     public string Descricao { get; set; } = default!;
     public decimal Valor { get; set; }
+    public DateOnly Data { get; set; }
     public TipoTransacao Tipo { get; set; }
 }

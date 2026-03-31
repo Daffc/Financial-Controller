@@ -18,6 +18,9 @@ public class CreateTransacaoRequest
     [EnumDataType(typeof(TipoTransacao), ErrorMessage = "Tipo inválido")]
     public TipoTransacao? Tipo { get; set; }
     
+    [Required(ErrorMessage = "Data é obrigatória")]
+    public DateOnly? Data { get; set; }
+
     [Required(ErrorMessage = "PessoaId é obrigatório")]
     public Guid? PessoaId { get; set; }
     

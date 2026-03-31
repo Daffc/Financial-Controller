@@ -12,6 +12,7 @@ public class Transacao
     public string Descricao { get; private set; }
     public decimal Valor { get; private set; }
     public TipoTransacao Tipo { get; private set; }
+    public DateOnly Data { get; private set; }
     public DateTime DataCriacao { get; private set; }
     public Guid PessoaId { get; private set; }
     public Guid CategoriaId { get; private set; }
@@ -22,7 +23,7 @@ public class Transacao
     public Pessoa? Pessoa { get; private set; }
     public Categoria? Categoria { get; private set; }
 
-    public Transacao(string descricao, decimal valor, TipoTransacao tipo, Guid pessoaId, Guid categoriaId, Guid usuarioId)
+    public Transacao(string descricao, decimal valor, TipoTransacao tipo, DateOnly data, Guid pessoaId, Guid categoriaId, Guid usuarioId)
     {
         if (string.IsNullOrWhiteSpace(descricao))
             throw new BadRequestException("Descricao é obrigatória");
@@ -33,9 +34,13 @@ public class Transacao
         if (!Enum.IsDefined(typeof(TipoTransacao), tipo))
             throw new BadRequestException("Tipo inválido");
 
+        if (data == default)
+            throw new ArgumentException("Data é obrigatória");
+
         Descricao = descricao;
         Valor = valor;
         Tipo = tipo;
+        Data = data;
         PessoaId = pessoaId;
         CategoriaId = categoriaId;
         UsuarioId = usuarioId;

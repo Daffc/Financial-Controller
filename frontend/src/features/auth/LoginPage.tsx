@@ -8,26 +8,37 @@ import {
 } from "@mui/material";
 import { RegisterForm } from "./components/RegisterForm";
 import { LoginForm } from "./components/LoginForm";
+import { useTheme } from "@mui/material/styles";
 
 export function LoginPage() {
     const [tab, setTab] = useState(0);
+    const theme = useTheme();
 
     return (
         <Box
             sx={{
-                height: "100vh",
+                minHeight: "100vh",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: "#f5f5f5",
+                backgroundColor: theme.palette.background.default,
             }}
         >
-            <Card sx={{ width: 400, p: 2 }}>
+            <Card
+                sx={{
+                    width: 420,
+                    p: 2,
+                    backgroundColor: "var(--surface)",
+                }}
+            >
                 <CardContent>
                     <Tabs
                         value={tab}
                         onChange={(_, v) => setTab(v)}
                         centered
+                        sx={{
+                            mb: 2,
+                        }}
                     >
                         <Tab label="Login" />
                         <Tab label="Cadastro" />

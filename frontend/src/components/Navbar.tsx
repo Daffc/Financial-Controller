@@ -3,15 +3,16 @@ import {
     AppBar,
     Toolbar,
     Typography,
-    Button,
     Box,
     Avatar,
     IconButton,
     Menu,
-    MenuItem
+    MenuItem,
+    Tabs,
+    Tab
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
-import PersonIcon from '@mui/icons-material/Person';
+import PersonIcon from "@mui/icons-material/Person";
 import { useAuth } from "../app/auth-provider";
 
 export function Navbar() {
@@ -21,10 +22,6 @@ export function Navbar() {
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-
-    function isActive(path: string) {
-        return location.pathname.startsWith(path);
-    }
 
     function handleOpenMenu(event: React.MouseEvent<HTMLElement>) {
         setAnchorEl(event.currentTarget);
@@ -40,51 +37,58 @@ export function Navbar() {
         navigate("/login");
     }
 
+    // 🔥 define aba ativa baseada na rota
+    function getTabValue() {
+        if (location.pathname.startsWith("/dashboard")) return "/dashboard";
+        if (location.pathname.startsWith("/pessoas")) return "/pessoas";
+        if (location.pathname.startsWith("/categorias")) return "/categorias";
+        if (location.pathname.startsWith("/transacoes")) return "/transacoes";
+        return false;
+    }
+
     return (
-        <AppBar position="static">
-            <Toolbar sx={{ justifyContent: "space-between" }}>
-                <Typography variant="h6" sx={{ flexGrow: 1 }}>
+        <AppBar 
+            position="static"
+            color="transparent"
+            elevation={0}
+            sx={{
+                backgroundColor: "var(--bg)",
+                borderBottom: "1px solid var(--border)"
+            }}
+        >
+            <Toolbar sx={{
+                position: "relative",
+            }}>
+                <Typography variant="h6" sx={{
+                    flexGrow: 1,
+                    color: "var(--accent)"
+                }}>
                     Financial Controller
                 </Typography>
-                <Box
+
+                <Tabs
+                    value={getTabValue()}
+                    onChange={(_, value) => navigate(value)}
                     sx={{
                         position: "absolute",
                         left: "50%",
                         transform: "translateX(-50%)",
-                        display: "flex",
-                        gap: 10
+
+                        "& .MuiTabs-indicator": {
+                            height: 3,
+                            borderRadius: 2
+                        },
+
+                        "& .MuiTab-root:hover": {
+                            opacity: 0.8
+                        }
                     }}
                 >
-                    <Button
-                        color="inherit"
-                        variant={isActive("/dashboard") ? "outlined" : "text"}
-                        onClick={() => navigate("/dashboard")}
-                    >
-                        Dashboard
-                    </Button>
-                    <Button
-                        color="inherit"
-                        variant={isActive("/pessoas") ? "outlined" : "text"}
-                        onClick={() => navigate("/pessoas")}
-                    >
-                        Pessoas
-                    </Button>
-                    <Button
-                        color="inherit"
-                        variant={isActive("/categorias") ? "outlined" : "text"}
-                        onClick={() => navigate("/categorias")}
-                    >
-                        Categorias
-                    </Button>
-                    <Button
-                        color="inherit"
-                        variant={isActive("/transacoes") ? "outlined" : "text"}
-                        onClick={() => navigate("/transacoes")}
-                    >
-                        Tlogoutransações
-                    </Button>
-
-                </Box>
+                    <Tab label="Dashboard" value="/dashboard" />
+                    <Tab label="Pessoas" value="/pessoas" />
+                    <Tab label="Categorias" value="/categorias" />
+                    <Tab label="Transações" value="/transacoes" />
+                </Tabs>
                 <Box>
                     <IconButton onClick={handleOpenMenu}>
                         <Avatar sx={{ width: 32, height: 32 }}>
@@ -112,5 +116,5 @@ export function Navbar() {
                 </Box>
             </Toolbar>
         </AppBar>
-    )
+    );
 }

@@ -1,36 +1,36 @@
 export const tokens = {
   colors: {
     accent: {
-      light: "#7c3aed", // violet-600 (moderno e elegante)
-      dark: "#a78bfa",  // violet-400
+      light: "#7c3aed",
+      dark: "#a78bfa",
     },
 
     background: {
-      light: "#fafafa", // off-white (menos agressivo que branco puro)
-      dark: "#0f172a",  // slate-900 (deep modern dark)
+      light: "#fafafa",
+      dark: "#0f172a",
     },
 
     surface: {
       light: "#ffffff",
-      dark: "#111827", // ligeiramente acima do background
+      dark: "#111827",
     },
 
     text: {
-      primaryLight: "#0f172a",   // slate-900
-      secondaryLight: "#475569", // slate-600
+      primaryLight: "#0f172a",
+      secondaryLight: "#475569",
 
-      primaryDark: "#f8fafc",    // slate-50
-      secondaryDark: "#94a3b8",  // slate-400
+      primaryDark: "#f8fafc",
+      secondaryDark: "#94a3b8",
     },
 
     border: {
-      light: "#e2e8f0", // slate-200
-      dark: "#1f2937",  // gray-800
+      light: "#e2e8f0",
+      dark: "#1f2937",
     },
 
     codeBg: {
-      light: "#f1f5f9", // slate-100
-      dark: "#020617",  // quase preto
+      light: "#f1f5f9",
+      dark: "#020617",
     },
 
     success: {

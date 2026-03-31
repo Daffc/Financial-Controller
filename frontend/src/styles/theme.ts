@@ -1,5 +1,6 @@
 import { createTheme } from "@mui/material";
 import { tokens } from "./tokens";
+import { ptBR } from "@mui/x-data-grid/locales";
 
 /**
  * Aplica CSS Variables no :root
@@ -50,7 +51,7 @@ export function createAppTheme(mode: "light" | "dark" = "light") {
 
   const isDark = mode === "dark";
 
-  return createTheme({
+  const baseTheme = createTheme({
     palette: {
       mode,
 
@@ -173,6 +174,8 @@ export function createAppTheme(mode: "light" | "dark" = "light") {
       },
     },
   });
+
+  return createTheme(baseTheme, ptBR);
 }
 
 export const theme = createAppTheme("light");

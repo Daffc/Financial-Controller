@@ -1,7 +1,7 @@
 import type { FinalidadeCategoria } from "../../../domain/enums/FinalidadeCategoria";
 
-export interface Categoria {
-    id: string;
+export interface ListCategoriaResponse {
+    id: string,
     descricao: string;
     finalidade: FinalidadeCategoria;
 }

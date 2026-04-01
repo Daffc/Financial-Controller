@@ -1,7 +1,7 @@
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { useCategorias } from "../hooks/useCategorias";
 import { finalidadeLabels } from "../../../domain/mappers/finalidadeMapper";
-import { type Categoria } from "../types/categoria";
+import { type Categoria } from "../../../domain/models/Categoria";
 
 export function CategoriasGrid() {
 

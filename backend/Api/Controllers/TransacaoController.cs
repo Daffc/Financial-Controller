@@ -41,10 +41,10 @@ public sealed class TransacaoController : ControllerBase
     [SwaggerResponse(StatusCodes.Status200OK, "Lista recuperada", typeof(List<ListTransacoesResponse>))]
     [SwaggerResponse(StatusCodes.Status401Unauthorized, "Não autenticado", typeof(ApiErrorResponse))]
     [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno", typeof(ApiErrorResponse))]
-    public async Task<IActionResult> List()
+    public async Task<IActionResult> List([FromQuery] ListTransacoesRequest request)
     {
         var usuarioId = User.GetUserId();
-        var result = await _listTransacoesHandler.Handle(usuarioId);
+        var result = await _listTransacoesHandler.Handle(request, usuarioId);
         return Ok(result);
     }
 }

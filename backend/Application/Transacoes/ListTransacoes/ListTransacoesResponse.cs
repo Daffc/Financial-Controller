@@ -6,6 +6,7 @@ public class ListTransacoesResponse
     public required string Descricao { get; set; }
     public decimal Valor { get; set; }
     public int Tipo { get; set; }
-    public Guid PessoaId { get; set; }
-    public Guid CategoriaId { get; set; }
+    public DateOnly Data { get; set; }
+    public required string PessoaNome { get; set; }
+    public required string CategoriaDescricao { get; set; }
 }

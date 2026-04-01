@@ -19,6 +19,7 @@ using FinancialControllerServer.Application.Pessoas.ListPessoas;
 using FinancialControllerServer.Application.Pessoas.DeletePessoa;
 using FinancialControllerServer.Application.Transacoes.CreateTransacao;
 using FinancialControllerServer.Application.Transacoes.ListTransacoes;
+using FinancialControllerServer.Application.Transacoes.DeleteTransacao;
 using FinancialControllerServer.Domain.Interfaces;
 using FinancialControllerServer.Domain.Exceptions;
 using FinancialControllerServer.Infrastructure.Persistence;
@@ -220,6 +221,7 @@ builder.Services
     .AddScoped<DeletePessoaHandler>()
     .AddScoped<CreateTransacaoHandler>()
     .AddScoped<ListTransacoesHandler>()
+    .AddScoped<DeleteTransacaoHandler>()
     .AddScoped<ISenhaHasher, SenhaHasher>()
     .AddScoped<ITokenService, TokenService>()
     .AddScoped<ICategoriaRepository, CategoriaRepository>()

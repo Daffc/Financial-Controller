@@ -31,4 +31,16 @@ public class TransacaoRepository : ITransacaoRepository
             .OrderByDescending(t => t.DataCriacao)
             .ToListAsync();
     }
+
+    public async Task<Transacao?> GetByIdAndUsuarioId(Guid transacaoId, Guid usuarioId)
+    {
+        return await _dbContext.Transacoes
+            .FirstOrDefaultAsync(t => t.Id == transacaoId && t.UsuarioId == usuarioId);
+    }
+
+    public void Delete(Transacao transacao)
+    {
+        _dbContext.Transacoes
+            .Remove(transacao);
+    }
 }

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
-import { useAuth } from "../../app/auth-provider";
+import { useAuth } from "../../app/authProvider";
 
 export function Navbar() {
     const navigate = useNavigate();

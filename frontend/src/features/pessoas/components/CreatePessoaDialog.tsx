@@ -8,7 +8,7 @@ import {
     Stack
 } from "@mui/material";
 import { useCreatePessoa } from "../hooks/useCreatePessoa";
-import { useToast } from "../../../app/feedback-provider";
+import { useToast } from "../../../app/feedbackProvider";
 import { extractApiError } from "../../../api/interceptors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

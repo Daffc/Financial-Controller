@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@mui/material";
-import { AuthProvider } from "./auth-provider";
+import { AuthProvider } from "./authProvider";
 import { theme } from "../styles/theme";
-import { FeedbackProvider } from "./feedback-provider";
+import { FeedbackProvider } from "./feedbackProvider";
 import { CssBaseline } from "@mui/material";
 
 const queryClient = new QueryClient();

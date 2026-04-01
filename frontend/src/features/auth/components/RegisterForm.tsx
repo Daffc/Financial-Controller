@@ -5,7 +5,7 @@ import {
     Stack,
     TextField
 } from "@mui/material";
-import { useToast } from "../../../app/feedback-provider";
+import { useToast } from "../../../app/feedbackProvider";
 import { extractApiError } from "../../../api/interceptors";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

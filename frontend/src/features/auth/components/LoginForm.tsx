@@ -1,5 +1,5 @@
 import { login } from "../api/loginApi";
-import { useAuth } from "../../../app/auth-provider";
+import { useAuth } from "../../../app/authProvider";
 import { useNavigate } from "react-router-dom";
 import {
     Button,
@@ -7,7 +7,7 @@ import {
     TextField
 } from "@mui/material";
 import { extractApiError } from "../../../api/interceptors";
-import { useToast } from "../../../app/feedback-provider";
+import { useToast } from "../../../app/feedbackProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginUsuarioSchema, type LoginUsuarioFormData } from "../validation/login-usuario-schema";
 import { useForm } from "react-hook-form";

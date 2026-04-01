@@ -12,7 +12,7 @@ import {
 import DeleteIconForever from "@mui/icons-material/DeleteForever";
 import { usePessoas } from "../hooks/usePessoas";
 import { type Pessoa } from "../../../domain/models/Pessoa";
-import { useToast } from "../../../app/feedback-provider";
+import { useToast } from "../../../app/feedbackProvider";
 import { extractApiError } from "../../../api/interceptors";
 
 export function PessoasGrid() {

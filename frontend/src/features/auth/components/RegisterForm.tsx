@@ -1,5 +1,5 @@
 
-import { register } from "../register-api";
+import { register } from "../api/registerApi";
 import {
     Button,
     Stack,

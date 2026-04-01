@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Box, Paper, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { CategoriasGrid } from "../../features/categorias/components/CategoriasGrid";
-import { CreateCategoriaDialog } from "../../features/categorias/components/CreateCategoriaDialog";
+import { CategoriasGrid } from "../components/CategoriasGrid";
+import { CreateCategoriaDialog } from "../components/CreateCategoriaDialog";
 
 export function CategoriasPage() {
 

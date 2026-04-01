@@ -12,7 +12,7 @@ import { useToast } from "../../../app/feedback-provider";
 import { extractApiError } from "../../../api/interceptors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { createPessoaSchema, type CreatePessoaFormData, type CreatePessoaFormInput } from "../schemas/create-pessoa-schema";
+import { createPessoaSchema, type CreatePessoaFormData, type CreatePessoaFormInput } from "../schemas/createPessoaSchema";
 
 interface Props {
     open: boolean;

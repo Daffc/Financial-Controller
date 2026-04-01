@@ -1,7 +1,7 @@
 import { api } from "../../../api/axios";
-import { type CreateCategoriaRequest } from "../types/CreateCategoriaRequest";
-import { type ListCategoriaResponse } from "../types/ListCategoriasResponse";
-import { type CreateCategoriaResponse } from "../types/CreateCategoriaResponse";
+import { type CreateCategoriaRequest } from "../types/createCategoriaRequest";
+import { type ListCategoriaResponse } from "../types/listCategoriasResponse";
+import { type CreateCategoriaResponse } from "../types/createCategoriaResponse";
 
 export async function listCategorias(): Promise<ListCategoriaResponse[]> {
     const res = await api.get("/categorias");

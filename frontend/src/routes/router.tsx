@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
-import { LoginPage } from "../features/auth/LoginPage";
+import { LoginPage } from "../features/auth/pages/LoginPage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { RootRedirect } from "../app/RootRedirect";
 import { MainLayout } from "../layout/MainLayout";
-import { DashboardPage } from "../pages/dashboard/DashboardPage";
-import { CategoriasPage } from "../pages/categorias/CategoriasPage";
-import { PessoasPage } from "../pages/pessoas/PessoasPage";
-import { TransacoesPage } from "../pages/transacoes/TransacoesPage";
+import { DashboardPage } from "../features/dashboard/pages/DashboardPage";
+import { CategoriasPage } from "../features/categorias/pages/CategoriasPage";
+import { PessoasPage } from "../features/pessoas/pages/PessoasPage";
+import { TransacoesPage } from "../features/transacoes/pages/TransacoesPage";
 
 export const router = createBrowserRouter([
     {

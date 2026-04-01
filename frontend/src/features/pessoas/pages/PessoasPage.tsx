@@ -1,8 +1,8 @@
-import { PessoasGrid } from "../../features/pessoas/components/PessoasGrid";
+import { PessoasGrid } from "../components/PessoasGrid";
 import { useState } from "react";
 import { Button, Box, Paper} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { CreatePessoaDialog } from "../../features/pessoas/components/CreatePessoaDialog";
+import { CreatePessoaDialog } from "../components/CreatePessoaDialog";
 
 export function PessoasPage() {
   const [openCreate, setOpenCreate] = useState(false);

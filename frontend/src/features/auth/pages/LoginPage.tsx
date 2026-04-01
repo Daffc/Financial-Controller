@@ -6,8 +6,8 @@ import {
     Tab,
     Tabs
 } from "@mui/material";
-import { RegisterForm } from "./components/RegisterForm";
-import { LoginForm } from "./components/LoginForm";
+import { RegisterForm } from "../components/RegisterForm";
+import { LoginForm } from "../components/LoginForm";
 import { useTheme } from "@mui/material/styles";
 
 export function LoginPage() {

@@ -13,7 +13,7 @@ import { useToast } from "../../../app/feedback-provider";
 import { extractApiError } from "../../../api/interceptors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
-import { createCategoriaSchema, type CreateCategoriaFormData, type CreateCategoriaFormInput } from "../schemas/create-categoria-schema";
+import { createCategoriaSchema, type CreateCategoriaFormData, type CreateCategoriaFormInput } from "../schemas/createCategoriaSchema";
 import { finalidadeOptions } from "../../../domain/constants/finalidadeOptions";
 
 interface Props {

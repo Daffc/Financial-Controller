@@ -1,11 +1,15 @@
+import { useEffect } from "react";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { useCategorias } from "../hooks/useCategorias";
 import { finalidadeLabels } from "../../../domain/mappers/finalidadeMapper";
 import { type Categoria } from "../../../domain/models/Categoria";
+import { useToast } from "../../../app/feedbackProvider";
+import { extractApiError } from "../../../api/interceptors";
 
 export function CategoriasGrid() {
 
-    const { data, isLoading } = useCategorias();
+    const { showToast } = useToast();
+    const { data, isLoading, errorUpdatedAt, error } = useCategorias();
     const rows = data || [];
     const columns: GridColDef<Categoria>[] = [
         {
@@ -21,6 +25,12 @@ export function CategoriasGrid() {
                 finalidadeLabels[params.row.finalidade] ?? "Desconhecido",
         }
     ];
+
+    useEffect(() => {
+        if (error) {
+            showToast(extractApiError(error), "error");
+        }
+    }, [errorUpdatedAt]);
 
     return (
         <div style={{ height: 500, width: "100%" }}>

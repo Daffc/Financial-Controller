@@ -10,17 +10,25 @@ interface ApiErrorResponse {
 export function extractApiError(error: any): string {
   const data: ApiErrorResponse = error?.response?.data;
 
-  let msg = data.message || "Erro desconhecido";
+  if(data){
+    let msg = data.message || "Erro desconhecido";
 
-  if (data.errors && data.errors.length > 0) {
-    msg += ":\n" + data.errors.map(e => `  • ${e}`).join("\n");
+    if (data.errors && data.errors.length > 0) {
+      msg += ":\n" + data.errors.map(e => `  • ${e}`).join("\n");
+    }
+  
+    if (data.errors && data.errors.length > 0) {
+      msg += `\nTraceId: ${data.traceId}`;
+    }
+
+    return msg;
+  }
+  
+  if (error?.message === "Network Error" || error?.code === "ERR_NETWORK") {
+    return "Erro de conexão com o servidor.";
   }
 
-  if (data.errors && data.errors.length > 0) {
-    msg += `\nTraceId: ${data.traceId}`;
-  }
-
-  return msg;
+  return "Erro desconhecido"
 }
 
 api.interceptors.request.use((config) => {

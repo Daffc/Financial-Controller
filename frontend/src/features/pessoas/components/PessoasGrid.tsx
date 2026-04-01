@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import {
     IconButton,
@@ -17,8 +17,8 @@ import { extractApiError } from "../../../api/interceptors";
 
 export function PessoasGrid() {
     const { showToast } = useToast();
-    
-    const { data, isLoading, deletePessoa } = usePessoas();
+
+    const { data, isLoading, error, errorUpdatedAt, deletePessoa } = usePessoas();
     const rows = data || [];
     const columns: GridColDef[] = [
         {
@@ -46,6 +46,12 @@ export function PessoasGrid() {
             ),
         }
     ]
+
+    useEffect(() => {
+        if (error) {
+            showToast(extractApiError(error), "error");
+        }
+    }, [errorUpdatedAt]);
 
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedPessoa, setSelectedPessoa] = useState<Pessoa | null>(null);

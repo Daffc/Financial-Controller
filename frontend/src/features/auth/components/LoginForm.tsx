@@ -38,31 +38,32 @@ export function LoginForm() {
     }
 
     return (
-
-        <Stack spacing={2} mt={2}>
-            <TextField
-                label="Email"
-                fullWidth
-                {...formLogin("email")}
-                error={!!errors.email}
-                helperText={errors.email?.message}
-            />
-            <TextField
-                label="Senha"
-                type="password"
-                fullWidth
-                {...formLogin("senha")}
-                error={!!errors.senha}
-                helperText={errors.senha?.message}
-            />
-            <Button
-                variant="contained"
-                fullWidth
-                onClick={handleSubmit(onSubmit)}
-                disabled={isSubmitting}
-            >
-                {isSubmitting ? "Entrando..." : "Entrar"}
-            </Button>
-        </Stack>
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <Stack spacing={2} mt={2}>
+                <TextField
+                    label="Email"
+                    fullWidth
+                    {...formLogin("email")}
+                    error={!!errors.email}
+                    helperText={errors.email?.message}
+                />
+                <TextField
+                    label="Senha"
+                    type="password"
+                    fullWidth
+                    {...formLogin("senha")}
+                    error={!!errors.senha}
+                    helperText={errors.senha?.message}
+                />
+                <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    disabled={isSubmitting}
+                >
+                    {isSubmitting ? "Entrando..." : "Entrar"}
+                </Button>
+            </Stack>
+        </form>
     )
 }

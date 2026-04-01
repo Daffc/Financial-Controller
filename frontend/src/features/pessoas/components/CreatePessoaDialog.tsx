@@ -12,7 +12,7 @@ import { useToast } from "../../../app/feedback-provider";
 import { extractApiError } from "../../../api/interceptors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { createPessoaSchema, type CreatePessoaFormData } from "../schemas/create-pessoa-schema";
+import { createPessoaSchema, type CreatePessoaFormData, type CreatePessoaFormInput } from "../schemas/create-pessoa-schema";
 
 interface Props {
     open: boolean;
@@ -27,17 +27,17 @@ export function CreatePessoaDialog({ open, onClose }: Props) {
         handleSubmit,
         reset,
         formState: { errors, isSubmitting },
-    } = useForm<CreatePessoaFormData>({
+    } = useForm<CreatePessoaFormInput>({
         resolver: zodResolver(createPessoaSchema),
         defaultValues: {
             nome: "",
-            idade: undefined
+            idade: 0
         }
     });
 
-    async function onSubmit(data: CreatePessoaFormData) {
+    async function onSubmit(data: CreatePessoaFormInput) {
         try {
-            await mutateAsync(data);
+            await mutateAsync(data as CreatePessoaFormData);
             showToast("Pessoa criada com sucesso", "success");
             reset({
                 nome: "",
@@ -66,40 +66,44 @@ export function CreatePessoaDialog({ open, onClose }: Props) {
             keepMounted={false}
         >
             <DialogTitle>Nova Pessoa</DialogTitle>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <DialogContent>
+                    <Stack spacing={2} mt={1}>
+                        <TextField
+                            label="Nome"
+                            {...register("nome")}
+                            error={!!errors.nome}
+                            helperText={errors.nome?.message}
+                        />
 
-            <DialogContent>
-                <Stack spacing={2} mt={1}>
-                    <TextField
-                        label="Nome"
-                        {...register("nome")}
-                        error={!!errors.nome}
-                        helperText={errors.nome?.message}
-                    />
-                    <TextField
-                        type="number"
-                        label="Idade"
-                        {...register("idade", { valueAsNumber: true })}
-                        error={!!errors.idade}
-                        helperText={errors.idade?.message}
-                    />
-                </Stack>
-            </DialogContent>
+                        <TextField
+                            type="number"
+                            label="Idade"
+                            {...register("idade", {
+                                setValueAs: (value) => value === "" ? undefined : Number(value)
+                            })}
+                            error={!!errors.idade}
+                            helperText={errors.idade?.message}
+                        />
+                    </Stack>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={handleClose}
+                        color="inherit"
+                        variant="outlined"
+                    >
+                        Cancelar
+                    </Button>
 
-            <DialogActions>
-                <Button
-                    onClick={handleClose}
-                    color="inherit"
-                    variant="outlined"
-                >
-                    Cancelar
-                </Button>
-                <Button
-                    onClick={handleSubmit(onSubmit)}
-                    disabled={isSubmitting || isPending}
-                >
-                    {isSubmitting || isPending ? "Salvando..." : "Salvar"}
-                </Button>
-            </DialogActions>
+                    <Button
+                        type="submit"
+                        disabled={isSubmitting || isPending}
+                    >
+                        {isSubmitting || isPending ? "Salvando..." : "Salvar"}
+                    </Button>
+                </DialogActions>
+            </form>
         </Dialog>
     );
 }

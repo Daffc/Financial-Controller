@@ -33,37 +33,39 @@ export function RegisterForm({ setTab }: any) {
     }
 
     return (
-        <Stack spacing={2} mt={2}>
-            <TextField
-                label="Nome"
-                fullWidth
-                {...formRegister("nome")}
-                error={!!errors.nome}
-                helperText={errors.nome?.message}
-            />
-            <TextField
-                label="Email"
-                fullWidth
-                {...formRegister("email")}
-                error={!!errors.email}
-                helperText={errors.email?.message}
-            />
-            <TextField
-                label="Senha"
-                type="password"
-                fullWidth
-                {...formRegister("senha")}
-                error={!!errors.senha}
-                helperText={errors.senha?.message}
-            />
-            <Button
-                variant="contained"
-                fullWidth
-                onClick={handleSubmit(onSubmit)}
-                disabled={isSubmitting}
-            >
-                {isSubmitting ? "Cadastrando..." : "Cadastrar"}
-            </Button>
-        </Stack>
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <Stack spacing={2} mt={2}>
+                <TextField
+                    label="Nome"
+                    fullWidth
+                    {...formRegister("nome")}
+                    error={!!errors.nome}
+                    helperText={errors.nome?.message}
+                />
+                <TextField
+                    label="Email"
+                    fullWidth
+                    {...formRegister("email")}
+                    error={!!errors.email}
+                    helperText={errors.email?.message}
+                />
+                <TextField
+                    label="Senha"
+                    type="password"
+                    fullWidth
+                    {...formRegister("senha")}
+                    error={!!errors.senha}
+                    helperText={errors.senha?.message}
+                />
+                <Button
+                    type="submit"
+                    variant="contained"
+                    fullWidth
+                    disabled={isSubmitting}
+                >
+                    {isSubmitting ? "Cadastrando..." : "Cadastrar"}
+                </Button>
+            </Stack>
+        </form>
     )
 }

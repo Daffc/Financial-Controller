@@ -7,11 +7,20 @@ export const createPessoaSchema = z.object({
         .max(200, "Nome deve conter no máximo 200 caracteres"),
 
     idade: z
-        .coerce.number({
+        .union([z.number(), z.undefined()])
+        .refine((val) => val !== undefined, {
             message: "Idade é obrigatória",
         })
-        .min(0, "Idade deve ser no mínimo 0")
-        .max(150, "Idade deve ser no máximo 150"),
+        .refine((val) => typeof val === "number" && !isNaN(val), {
+            message: "Idade deve ser um número",
+        })
+        .refine((val) => val! >= 0, {
+            message: "Idade deve ser no mínimo 0",
+        })
+        .refine((val) => val! <= 150, {
+            message: "Idade deve ser no máximo 150",
+        }),
 });
 
-export type CreatePessoaFormData = z.infer<typeof createPessoaSchema>;
+export type CreatePessoaFormInput = z.input<typeof createPessoaSchema>;
+export type CreatePessoaFormData = z.output<typeof createPessoaSchema>;

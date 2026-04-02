@@ -61,6 +61,10 @@ export const tokens = {
       expense: {
         light: "#dc2626",
         dark: "#f87171",
+      },
+      neutral: {
+        light: "#1976d2",
+        dark: "#64b5f6"
       }
     }
   },

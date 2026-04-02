@@ -14,6 +14,7 @@ import { tipoTransacaoLabels } from "../../../domain/mappers/tipoTransacaoMapper
 import type { ListTransacoesResponse } from "../types/listTransacoesResponse";
 import { formatDateBR } from "../../../utils/date";
 import { formatCurrencyBR } from "../../../utils/currency";
+import { TipoTransacao } from "../../../domain/enums/TipoTransacao";
 
 
 interface Props {
@@ -36,15 +37,39 @@ export function TransacoesGrid({ data, isLoading = false, onDelete }: Props) {
             flex: 1,
             align: "right",
             headerAlign: "right",
-            renderCell: (params) =>
-                formatCurrencyBR(params.row.valor),
+            renderCell: (params) => {
+                return (
+                    <span
+                        style={{
+                            color: params.row.tipo === TipoTransacao.DESPESA
+                                ? "var(--color-expense)"
+                                : "var(--color-income)",
+                            fontWeight: 500,
+                        }}
+                    >
+                        {formatCurrencyBR(params.row.valor)}
+                    </span>
+                );
+            },
         },
         {
             field: "tipo",
             headerName: "Tipo",
             flex: 1,
-            renderCell: (params) =>
-                tipoTransacaoLabels[params.row.tipo] ?? "Desconhecido",
+            renderCell: (params) => {
+                   return (
+                    <span
+                        style={{
+                            color: params.row.tipo === TipoTransacao.DESPESA
+                                ? "var(--color-expense)"
+                                : "var(--color-income)",
+                            fontWeight: 500,
+                        }}
+                    >
+                        {tipoTransacaoLabels[params.row.tipo] ?? "Desconhecido"}
+                    </span>
+                );
+            },
         },
         {
             field: "data",
@@ -79,65 +104,65 @@ export function TransacoesGrid({ data, isLoading = false, onDelete }: Props) {
         }] : [])
     ]
 
-const [openDialog, setOpenDialog] = useState(false);
-const [selectedTransacao, setSelectedTransacao] = useState<ListTransacoesResponse | null>(null);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [selectedTransacao, setSelectedTransacao] = useState<ListTransacoesResponse | null>(null);
 
-function handleOpenDialog(transacao: ListTransacoesResponse) {
-    setSelectedTransacao(transacao);
-    setOpenDialog(true);
-}
+    function handleOpenDialog(transacao: ListTransacoesResponse) {
+        setSelectedTransacao(transacao);
+        setOpenDialog(true);
+    }
 
-function handleCloseDialog() {
-    setOpenDialog(false);
-    setSelectedTransacao(null);
-}
+    function handleCloseDialog() {
+        setOpenDialog(false);
+        setSelectedTransacao(null);
+    }
 
-function handleConfirmDelete() {
-    if (!selectedTransacao || !onDelete)
-        return;
+    function handleConfirmDelete() {
+        if (!selectedTransacao || !onDelete)
+            return;
 
-    onDelete(selectedTransacao.id!);
-    handleCloseDialog();
-}
+        onDelete(selectedTransacao.id!);
+        handleCloseDialog();
+    }
 
-return (
-    <>
-        <div style={{ height: 500, width: "100%" }}>
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                loading={isLoading}
-                getRowId={(row) => row.id}
-                disableRowSelectionOnClick
-            />
-        </div>
-        <Dialog open={openDialog} onClose={handleCloseDialog}>
-            <DialogTitle>Confirmar exclusão</DialogTitle>
+    return (
+        <>
+            <div style={{ height: 500, width: "100%" }}>
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    loading={isLoading}
+                    getRowId={(row) => row.id}
+                    disableRowSelectionOnClick
+                />
+            </div>
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>Confirmar exclusão</DialogTitle>
 
-            <DialogContent>
-                <Box display="flex" flexDirection="column" gap={1}>
-                    <span>
-                        Deseja realmente excluir{" "}
-                        <strong>{selectedTransacao?.descricao}</strong>?
-                    </span>
-                </Box>
-            </DialogContent>
-            <DialogActions>
-                <Button
-                    variant="outlined"
-                    onClick={handleCloseDialog}
-                >
-                    Cancelar
-                </Button>
-                <Button
-                    color="error"
-                    variant="contained"
-                    onClick={handleConfirmDelete}
-                >
-                    Excluir
-                </Button>
-            </DialogActions>
-        </Dialog>
-    </>
-);
+                <DialogContent>
+                    <Box display="flex" flexDirection="column" gap={1}>
+                        <span>
+                            Deseja realmente excluir{" "}
+                            <strong>{selectedTransacao?.descricao}</strong>?
+                        </span>
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="outlined"
+                        onClick={handleCloseDialog}
+                    >
+                        Cancelar
+                    </Button>
+                    <Button
+                        color="error"
+                        variant="contained"
+                        onClick={handleConfirmDelete}
+                    >
+                        Excluir
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </>
+    );
 }

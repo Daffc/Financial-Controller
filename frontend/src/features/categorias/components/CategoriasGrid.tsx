@@ -5,6 +5,7 @@ import { finalidadeLabels } from "../../../domain/mappers/finalidadeMapper";
 import { type Categoria } from "../../../domain/models/Categoria";
 import { useToast } from "../../../app/feedbackProvider";
 import { extractApiError } from "../../../api/interceptors";
+import { FinalidadeCategoria } from "../../../domain/enums/FinalidadeCategoria";
 
 export function CategoriasGrid() {
 
@@ -21,8 +22,23 @@ export function CategoriasGrid() {
             field: "finalidade",
             headerName: "Finalidade",
             width: 150,
-            renderCell: (params) =>
-                finalidadeLabels[params.row.finalidade] ?? "Desconhecido",
+            renderCell: (params) => {
+                return (
+                    <span
+                        style={{
+                            color:
+                                params.row.finalidade === FinalidadeCategoria.DESPESA
+                                    ? "var(--color-expense)"
+                                    : params.row.finalidade === FinalidadeCategoria.RECEITA
+                                        ? "var(--color-income)"
+                                        : "var(--color-neutral)",
+                            fontWeight: 500,
+                        }}
+                    >
+                        {finalidadeLabels[params.row.finalidade] ?? "Desconhecido"}
+                    </span>
+                );
+            },
         }
     ];
 

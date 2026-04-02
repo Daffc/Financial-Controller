@@ -16,6 +16,7 @@ import { extractApiError } from "../../../api/interceptors";
 import { tipoTransacaoLabels } from "../../../domain/mappers/tipoTransacaoMapper";
 import type { ListTransacoesResponse } from "../types/listTransacoesResponse";
 import { formatDateBR } from "../../../utils/date";
+import { formatCurrencyBR } from "../../../utils/currency";
 
 export function TransacoesGrid() {
     const { showToast } = useToast();
@@ -31,7 +32,11 @@ export function TransacoesGrid() {
         {
             field: "valor",
             headerName: "Valor",
-            flex: 1
+            flex: 1,
+            align: "right",
+            headerAlign: "right",
+            renderCell: (params) =>
+                formatCurrencyBR(params.row.valor),
         },
         {
             field: "tipo",

@@ -1,12 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { listTransacoes, deleteTransacao } from "../api/transacoes.api";
+import type { ListTransacoesRequest } from "../types/listTransacoesRequest";
 
-export function useTransacoes() {
+export function useTransacoes(filters?: ListTransacoesRequest) {
     const queryClient = useQueryClient();
 
     const query = useQuery({
-        queryKey: ["transacoes"],
-        queryFn: listTransacoes,
+        queryKey: ["transacoes", filters],
+        queryFn: () => listTransacoes(filters),
     });
 
     const deleteMutation = useMutation({

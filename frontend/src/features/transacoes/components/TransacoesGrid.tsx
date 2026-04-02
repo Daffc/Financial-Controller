@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { DataGrid, type GridColDef } from "@mui/x-data-grid";
+import { useState } from "react";
+import { DataGrid, type GridColDef, type GridRenderCellParams } from "@mui/x-data-grid";
 import {
     IconButton,
     Dialog,
@@ -10,18 +10,19 @@ import {
     Box
 } from "@mui/material";
 import DeleteIconForever from "@mui/icons-material/DeleteForever";
-import { useTransacoes } from "../hooks/useTransacoes";
-import { useToast } from "../../../app/feedbackProvider";
-import { extractApiError } from "../../../api/interceptors";
 import { tipoTransacaoLabels } from "../../../domain/mappers/tipoTransacaoMapper";
 import type { ListTransacoesResponse } from "../types/listTransacoesResponse";
 import { formatDateBR } from "../../../utils/date";
 import { formatCurrencyBR } from "../../../utils/currency";
 
-export function TransacoesGrid() {
-    const { showToast } = useToast();
 
-    const { data, isLoading, error, errorUpdatedAt, deleteTransacao } = useTransacoes();
+interface Props {
+    data?: ListTransacoesResponse[];
+    isLoading: boolean;
+    onDelete?: (id: string) => void;
+}
+export function TransacoesGrid({ data, isLoading = false, onDelete }: Props) {
+
     const rows = data || [];
     const columns: GridColDef<ListTransacoesResponse>[] = [
         {
@@ -62,12 +63,12 @@ export function TransacoesGrid() {
             headerName: "Categoria",
             flex: 1
         },
-        {
+        ...(onDelete ? [{
             field: "actions",
             headerName: "Ação",
             width: 100,
             sortable: false,
-            renderCell: (params) => (
+            renderCell: (params: GridRenderCellParams<ListTransacoesResponse>) => (
                 <IconButton
                     color="error"
                     onClick={() => handleOpenDialog(params.row)}
@@ -75,81 +76,68 @@ export function TransacoesGrid() {
                     <DeleteIconForever />
                 </IconButton>
             ),
-        }
+        }] : [])
     ]
 
-    useEffect(() => {
-        if (error) {
-            showToast(extractApiError(error), "error");
-        }
-    }, [errorUpdatedAt]);
+const [openDialog, setOpenDialog] = useState(false);
+const [selectedTransacao, setSelectedTransacao] = useState<ListTransacoesResponse | null>(null);
 
-    const [openDialog, setOpenDialog] = useState(false);
-    const [selectedTransacao, setSelectedTransacao] = useState<ListTransacoesResponse | null>(null);
+function handleOpenDialog(transacao: ListTransacoesResponse) {
+    setSelectedTransacao(transacao);
+    setOpenDialog(true);
+}
 
-    function handleOpenDialog(transacao: ListTransacoesResponse) {
-        setSelectedTransacao(transacao);
-        setOpenDialog(true);
-    }
+function handleCloseDialog() {
+    setOpenDialog(false);
+    setSelectedTransacao(null);
+}
 
-    function handleCloseDialog() {
-        setOpenDialog(false);
-        setSelectedTransacao(null);
-    }
+function handleConfirmDelete() {
+    if (!selectedTransacao || !onDelete)
+        return;
 
-    function handleConfirmDelete() {
-        if (!selectedTransacao) return;
+    onDelete(selectedTransacao.id!);
+    handleCloseDialog();
+}
 
-        deleteTransacao(selectedTransacao.id!, {
-            onSuccess: () => {
-                showToast("Transação removida com sucesso", "success");
-            },
-            onError: (err) => {
-                showToast(extractApiError(err), "error");
-            }
-        });
+return (
+    <>
+        <div style={{ height: 500, width: "100%" }}>
+            <DataGrid
+                rows={rows}
+                columns={columns}
+                loading={isLoading}
+                getRowId={(row) => row.id}
+                disableRowSelectionOnClick
+            />
+        </div>
+        <Dialog open={openDialog} onClose={handleCloseDialog}>
+            <DialogTitle>Confirmar exclusão</DialogTitle>
 
-        handleCloseDialog();
-    }
-
-    return (
-        <>
-            <div style={{ height: 500, width: "100%" }}>
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    loading={isLoading}
-                    getRowId={(row) => row.id}
-                    disableRowSelectionOnClick
-                />
-            </div>
-            <Dialog open={openDialog} onClose={handleCloseDialog}>
-                <DialogTitle>Confirmar exclusão</DialogTitle>
-
-                <DialogContent>
-                    <Box display="flex" flexDirection="column" gap={1}>
-                        <span>
-                            Deseja realmente excluir{" "}
-                            <strong>{selectedTransacao?.descricao}</strong>?
-                        </span>
-                    </Box>
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        variant="outlined"
-                        onClick={handleCloseDialog}
-                    >
-                        Cancelar
-                    </Button>
-                    <Button
-                        color="error"
-                        variant="contained"
-                        onClick={handleConfirmDelete}
-                    >
-                        Excluir
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </>
-    );
+            <DialogContent>
+                <Box display="flex" flexDirection="column" gap={1}>
+                    <span>
+                        Deseja realmente excluir{" "}
+                        <strong>{selectedTransacao?.descricao}</strong>?
+                    </span>
+                </Box>
+            </DialogContent>
+            <DialogActions>
+                <Button
+                    variant="outlined"
+                    onClick={handleCloseDialog}
+                >
+                    Cancelar
+                </Button>
+                <Button
+                    color="error"
+                    variant="contained"
+                    onClick={handleConfirmDelete}
+                >
+                    Excluir
+                </Button>
+            </DialogActions>
+        </Dialog>
+    </>
+);
 }

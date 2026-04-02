@@ -1,10 +1,13 @@
 import { api } from "../../../api/axios";
 import { type CreateTransacaoRequest } from "../types/createTransacaoRequest";
 import { type CreateTransacaoResponse } from "../types/createTransacaoResponse";
+import type { ListTransacoesRequest } from "../types/listTransacoesRequest";
 import { type ListTransacoesResponse } from "../types/listTransacoesResponse";
 
-export async function listTransacoes(): Promise<ListTransacoesResponse[]> {
-    const response = await api.get("/transacoes");
+export async function listTransacoes( params ?: ListTransacoesRequest): Promise<ListTransacoesResponse[]> {
+    const response = await api.get("/transacoes", {
+        params
+    });
     return response.data;
 }
 

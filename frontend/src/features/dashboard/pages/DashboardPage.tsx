@@ -1,15 +1,34 @@
-import { Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Paper } from "@mui/material";
+import { DashboardFilters } from "../components/DashboardFilters";
+import type { DashboardFiltersInput } from "../schemas/dashboardFiltersSchema";
+import { useTransacoes } from "../../transacoes/hooks/useTransacoes";
+import { TransacoesGrid } from "../../transacoes/components/TransacoesGrid";
+import { useToast } from "../../../app/feedbackProvider";
+import { extractApiError } from "../../../api/interceptors";
 
 export function DashboardPage() {
-  return (
-    <>
-      <Typography variant="h4" gutterBottom>
-        Dashboard
-      </Typography>
+    const [filters, setFilters] = useState<DashboardFiltersInput>();
+    const { data, isLoading, error, errorUpdatedAt } = useTransacoes(filters);
+    const { showToast } = useToast()
 
-      <Typography>
-        Bem-vindo ao sistema de controle financeiro.
-      </Typography>
-    </>
-  );
+    useEffect(() => {
+        if (error) {
+            showToast(extractApiError(error), "error");
+        }
+    }, [errorUpdatedAt]);
+
+    return (
+        <Box display="flex" flexDirection="column" gap={2}>
+            <Paper sx={{ p: 2 }}>
+                <DashboardFilters onChange={setFilters} />
+            </Paper>
+            <Paper sx={{ p: 2 }}>
+                <TransacoesGrid
+                    data={data}
+                    isLoading={isLoading}
+                />
+            </Paper>
+        </Box>
+    );
 }

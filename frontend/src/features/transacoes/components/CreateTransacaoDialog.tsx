@@ -8,6 +8,7 @@ import {
     Stack,
     MenuItem
 } from "@mui/material";
+import { NumericFormat } from "react-number-format";
 import { useCreateTransacao } from "../hooks/useCreateTransacao";
 import { useToast } from "../../../app/feedbackProvider";
 import { extractApiError } from "../../../api/interceptors";
@@ -94,14 +95,28 @@ export function CreateTransacaoDialog({ open, onClose }: Props) {
                             error={!!errors.descricao}
                             helperText={errors.descricao?.message}
                         />
-                        <TextField
-                            type="number"
-                            label="Valor"
-                            {...register("valor", {
-                                setValueAs: (value) => value === "" ? undefined : Number(value)
-                            })}
-                            error={!!errors.valor}
-                            helperText={errors.valor?.message}
+                        <Controller
+                            name="valor"
+                            control={control}
+                            render={({ field, fieldState }) => (
+                                <NumericFormat
+                                    value={field.value ?? ""}
+                                    onValueChange={(values) => {
+                                        field.onChange(values.floatValue ?? undefined);
+                                    }}
+                                    thousandSeparator="."
+                                    decimalSeparator=","
+                                    prefix="R$ "
+                                    decimalScale={2}
+                                    fixedDecimalScale
+                                    allowNegative={false}
+                                    customInput={TextField}
+                                    label="Valor"
+                                    fullWidth
+                                    error={!!fieldState.error}
+                                    helperText={fieldState.error?.message}
+                                />
+                            )}
                         />
                         <Controller
                             name="tipo"

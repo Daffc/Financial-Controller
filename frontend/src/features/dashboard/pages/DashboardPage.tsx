@@ -6,6 +6,7 @@ import { useTransacoes } from "../../transacoes/hooks/useTransacoes";
 import { TransacoesGrid } from "../../transacoes/components/TransacoesGrid";
 import { useToast } from "../../../app/feedbackProvider";
 import { extractApiError } from "../../../api/interceptors";
+import { TransacoesBarChart } from "../components/TransacoesBarChart";
 
 export function DashboardPage() {
     const [filters, setFilters] = useState<DashboardFiltersInput>();
@@ -24,6 +25,10 @@ export function DashboardPage() {
                 <DashboardFilters onChange={setFilters} />
             </Paper>
             <Paper sx={{ p: 2 }}>
+                <TransacoesBarChart 
+                    data={data} 
+                    isLoading={isLoading}
+                />
                 <TransacoesGrid
                     data={data}
                     isLoading={isLoading}

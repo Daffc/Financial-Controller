@@ -52,6 +52,17 @@ export const tokens = {
       light: "#2563eb",
       dark: "#60a5fa",
     },
+
+    financial: {
+      income: {
+        light: "#16a34a",
+        dark: "#4ade80",
+      },
+      expense: {
+        light: "#dc2626",
+        dark: "#f87171",
+      }
+    }
   },
 
   typography: {

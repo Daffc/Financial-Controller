@@ -2,9 +2,6 @@ import { createTheme } from "@mui/material";
 import { tokens } from "./tokens";
 import { ptBR } from "@mui/x-data-grid/locales";
 
-/**
- * Aplica CSS Variables no :root
- */
 function applyCssVariables(mode: "light" | "dark") {
   if (typeof document === "undefined") return; // evita problemas SSR
 
@@ -39,13 +36,20 @@ function applyCssVariables(mode: "light" | "dark") {
     isDark ? tokens.colors.codeBg.dark : tokens.colors.codeBg.light
   );
 
+  root.style.setProperty(
+    "--color-income",
+    isDark ? tokens.colors.financial.income.dark : tokens.colors.financial.income.light
+  );
+
+  root.style.setProperty(
+    "--color-expense",
+    isDark ? tokens.colors.financial.expense.dark : tokens.colors.financial.expense.light
+  );
+
   root.style.setProperty("--font-family", tokens.typography.fontFamily);
   root.style.setProperty("--font-mono", tokens.typography.mono);
 }
 
-/**
- * Criação do theme
- */
 export function createAppTheme(mode: "light" | "dark" = "light") {
   applyCssVariables(mode);
 

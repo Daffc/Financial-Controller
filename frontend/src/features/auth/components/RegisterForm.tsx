@@ -9,7 +9,7 @@ import { useToast } from "../../../app/feedbackProvider";
 import { extractApiError } from "../../../api/interceptors";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerUsuarioSchema, type RegisterUsuarioFormData } from "../validation/register-usuario-schema";
+import { registerUsuarioSchema, type RegisterUsuarioFormData } from "../validation/registerUsuarioSchema";
 
 export function RegisterForm({ setTab }: any) {
     const { showToast } = useToast();

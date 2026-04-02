@@ -9,7 +9,7 @@ import {
 import { extractApiError } from "../../../api/interceptors";
 import { useToast } from "../../../app/feedbackProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginUsuarioSchema, type LoginUsuarioFormData } from "../validation/login-usuario-schema";
+import { loginUsuarioSchema, type LoginUsuarioFormData } from "../validation/loginUsuarioSchema";
 import { useForm } from "react-hook-form";
 
 export function LoginForm() {

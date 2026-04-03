@@ -1,19 +1,17 @@
 import { BarChart } from "@mui/x-charts/BarChart";
-import { type ListTransacoesResponse } from "../../transacoes/types/listTransacoesResponse";
-import { groupByCategoria } from "../utils/groupByCategoria";
 import { formatCurrencyBR } from "../../../utils/currency";
+import type { CategoriaSummary } from "../types/dashboardData";
 
 interface Props {
-    data?: ListTransacoesResponse[];
+    categorias?: CategoriaSummary[];
     isLoading: boolean
 }
 
-export function TransacoesBarChart({ data, isLoading }: Props) {
-    const group = data ? groupByCategoria(data) : []
+export function DashboardCategoriasBarChart({ categorias, isLoading }: Props) {
 
-    const categorias = group.map((g) => g.categoria);
-    const despesas = group.map((g) => -g.despesa);
-    const receitas = group.map((g) => g.receita);
+    const labels = categorias?.map((g) => g.categoria) ?? [];
+    const despesas = categorias?.map((g) => -g.despesa) ?? [];
+    const receitas = categorias?.map((g) => g.receita) ?? [];
 
     return (
         <BarChart
@@ -21,7 +19,7 @@ export function TransacoesBarChart({ data, isLoading }: Props) {
             xAxis={[
                 {
                     scaleType: "band",
-                    data: categorias
+                    data: labels
                 },
             ]}
 

@@ -75,58 +75,44 @@ Ao final da listagem anterior, deverá exibir o total geral de todas as categori
 
 ## Especificações da Implementação
 ### Diagrama ER
-
 ```mermaid
 erDiagram
 
-    %% =========================
-    %% ENTIDADE: USUARIO (TENANT)
-    %% =========================
     USUARIO {
         GUID Id PK "Identificador único"
         string Nome
-        string Email "Único (login)"
-        string SenhaHash "Senha criptografada"
+        string Email "Único"
+        string SenhaHash
         datetime DataCriacao
     }
 
-    %% =========================
-    %% ENTIDADE: PESSOA
-    %% =========================
     PESSOA {
         GUID Id PK
         string Nome "Máx 200 caracteres"
         int Idade
+        datetime DataCriacao
         GUID UsuarioId FK "Dono dos dados"
     }
 
-    %% =========================
-    %% ENTIDADE: CATEGORIA
-    %% =========================
     CATEGORIA {
         GUID Id PK
         string Descricao "Máx 400 caracteres"
         string Finalidade "DESPESA | RECEITA | AMBAS"
+        datetime DataCriacao
         GUID UsuarioId FK
     }
 
-    %% =========================
-    %% ENTIDADE: TRANSACAO
-    %% =========================
     TRANSACAO {
         GUID Id PK
-        string Descricao "Máx 400 caracteres"
-        decimal Valor "Somente positivo"
+        string Descricao
+        decimal Valor
         string Tipo "DESPESA | RECEITA"
+        date Data
         GUID PessoaId FK
         GUID CategoriaId FK
-        GUID UsuarioId FK "Isolamento por usuário"
-        datetime Data "Data da transação"
+        GUID UsuarioId FK
+        datetime DataCriacao
     }
-
-    %% =========================
-    %% RELACIONAMENTOS
-    %% =========================
 
     USUARIO ||--o{ PESSOA : "possui"
     USUARIO ||--o{ CATEGORIA : "possui"
@@ -134,38 +120,4 @@ erDiagram
 
     PESSOA ||--o{ TRANSACAO : "realiza"
     CATEGORIA ||--o{ TRANSACAO : "classifica"
-
-    %% =========================
-    %% REGRAS DE NEGÓCIO
-    %% =========================
-
-    %% 1. AUTENTICAÇÃO:
-    %% Usuário realiza login via Email + Senha
-    %% Sistema retorna JWT contendo UsuarioId
-
-    %% 2. ISOLAMENTO:
-    %% Toda query deve filtrar por UsuarioId (extraído do token)
-
-    %% 3. CONSISTÊNCIA:
-    %% TRANSACAO.UsuarioId == PESSOA.UsuarioId == CATEGORIA.UsuarioId
-
-    %% 4. EXCLUSÃO EM CASCATA:
-    %% Ao excluir PESSOA → remover TRANSACOES associadas
-
-    %% 5. MENOR DE IDADE:
-    %% Se PESSOA.Idade < 18:
-    %%    TRANSACAO.Tipo = DESPESA
-
-    %% 6. VALIDAÇÃO DE CATEGORIA:
-    %% DESPESA → categoria (DESPESA ou AMBAS)
-    %% RECEITA → categoria (RECEITA ou AMBAS)
-
-    %% 7. VALOR:
-    %% TRANSACAO.Valor > 0
-
-    %% =========================
-    %% CONSULTAS
-    %% =========================
-
-    %% Sempre filtradas por UsuarioId
 ```

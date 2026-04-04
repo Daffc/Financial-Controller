@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createPessoaSchema = z.object({
+export const pessoaBaseSchema = z.object({
     nome: z
         .string()
         .min(1, "Nome é obrigatório")
@@ -22,5 +22,12 @@ export const createPessoaSchema = z.object({
         }),
 });
 
+export const createPessoaSchema = pessoaBaseSchema;
+export const updatePessoaSchema = pessoaBaseSchema.extend({
+    id: z.string().uuid("Id inválido"),
+});
+
 export type CreatePessoaFormInput = z.input<typeof createPessoaSchema>;
 export type CreatePessoaFormData = z.output<typeof createPessoaSchema>;
+export type UpdatePessoaInput = z.input<typeof updatePessoaSchema>;
+export type UpdatePessoaData = z.output<typeof updatePessoaSchema>;

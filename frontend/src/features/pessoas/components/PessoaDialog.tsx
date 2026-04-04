@@ -12,15 +12,23 @@ import { useToast } from "../../../app/feedbackProvider";
 import { extractApiError } from "../../../api/interceptors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { createPessoaSchema, type CreatePessoaFormData, type CreatePessoaFormInput } from "../schemas/createPessoaSchema";
+import { createPessoaSchema, type CreatePessoaFormData, type CreatePessoaFormInput } from "../schemas/pessoaSchema";
+import { useUpdatePessoa } from "../hooks/useUpdatePessoa";
+import { useEffect } from "react";
+import type { UpdatePessoaRequest } from "../types/updatePessoasRequest";
 
 interface Props {
     open: boolean;
     onClose: () => void;
+    initialData?: UpdatePessoaRequest;
+    mode?: "create" | "edit";
 }
-export function CreatePessoaDialog({ open, onClose }: Props) {
-    const { mutateAsync, isPending } = useCreatePessoa();
+export function PessoaDialog({ open, onClose, initialData, mode }: Props) {
+    const { mutateAsync: createPessoa, isPending: isCreating } = useCreatePessoa();
+    const { mutateAsync: updatePessoa, isPending: isUpdating } = useUpdatePessoa();
     const { showToast } = useToast();
+
+    const isEdit = mode === "edit";
 
     const {
         register,
@@ -35,14 +43,30 @@ export function CreatePessoaDialog({ open, onClose }: Props) {
         }
     });
 
+    useEffect(() => {
+        if (open) {
+            reset(
+                initialData
+                    ? { nome: initialData.nome, idade: initialData.idade }
+                    : { nome: "", idade: 0 }
+            );
+        }
+    }, [open, initialData, reset]);
+
+
     async function onSubmit(data: CreatePessoaFormInput) {
         try {
-            await mutateAsync(data as CreatePessoaFormData);
-            showToast("Pessoa criada com sucesso", "success");
-            reset({
-                nome: "",
-                idade: 0
-            });
+            if (isEdit && initialData?.id) {
+                await updatePessoa({
+                    id: initialData.id,
+                    nome: data.nome,
+                    idade: data.idade!,
+                });
+                showToast("Pessoa atualizada com sucesso", "success");
+            } else {
+                await createPessoa(data as CreatePessoaFormData);
+                showToast("Pessoa criada com sucesso", "success");
+            }
             onClose();
         } catch (err: any) {
             showToast(extractApiError(err), "error");
@@ -65,7 +89,9 @@ export function CreatePessoaDialog({ open, onClose }: Props) {
             maxWidth="sm"
             keepMounted={false}
         >
-            <DialogTitle>Nova Pessoa</DialogTitle>
+            <DialogTitle>
+                {isEdit ? "Ediar Pessoa" : "Nova Pessoa"}
+            </DialogTitle>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <DialogContent>
                     <Stack spacing={2} mt={1}>
@@ -98,9 +124,13 @@ export function CreatePessoaDialog({ open, onClose }: Props) {
 
                     <Button
                         type="submit"
-                        disabled={isSubmitting || isPending}
+                        disabled={isSubmitting || isCreating || isUpdating}
                     >
-                        {isSubmitting || isPending ? "Salvando..." : "Salvar"}
+                        {
+                            (isSubmitting || isCreating || isUpdating)
+                                ? "Salvando..."
+                                : isEdit ? "Atualizar" : "Salvar"
+                        }
                     </Button>
                 </DialogActions>
             </form>

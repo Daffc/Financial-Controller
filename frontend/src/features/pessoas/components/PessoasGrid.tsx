@@ -10,10 +10,12 @@ import {
     Box
 } from "@mui/material";
 import DeleteIconForever from "@mui/icons-material/DeleteForever";
+import Edit from "@mui/icons-material/Edit";
 import { usePessoas } from "../hooks/usePessoas";
 import { type Pessoa } from "../../../domain/models/Pessoa";
 import { useToast } from "../../../app/feedbackProvider";
 import { extractApiError } from "../../../api/interceptors";
+import { PessoaDialog } from "./PessoaDialog";
 
 export function PessoasGrid() {
     const { showToast } = useToast();
@@ -37,12 +39,20 @@ export function PessoasGrid() {
             width: 100,
             sortable: false,
             renderCell: (params) => (
-                <IconButton
-                    color="error"
-                    onClick={() => handleOpenDialog(params.row)}
-                >
-                    <DeleteIconForever />
-                </IconButton>
+                <>
+                    <IconButton
+                        color="info"
+                        onClick={() => handleEdit(params.row)}
+                    >
+                        <Edit />
+                    </IconButton>
+                    <IconButton
+                        color="error"
+                        onClick={() => handleOpenDialog(params.row)}
+                    >
+                        <DeleteIconForever />
+                    </IconButton>
+                </>
             ),
         }
     ]
@@ -55,6 +65,17 @@ export function PessoasGrid() {
 
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedPessoa, setSelectedPessoa] = useState<Pessoa | null>(null);
+    const [openEditDialog, setOpenEditDialog] = useState(false);
+
+    function handleEdit(pessoa: Pessoa) {
+        setSelectedPessoa(pessoa);
+        setOpenEditDialog(true);
+    }
+
+    function handleCloseEdit() {
+        setOpenEditDialog(false);
+        setSelectedPessoa(null);
+    }
 
     function handleOpenDialog(pessoa: Pessoa) {
         setSelectedPessoa(pessoa);
@@ -127,6 +148,12 @@ export function PessoasGrid() {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <PessoaDialog
+                open={openEditDialog}
+                onClose={handleCloseEdit}
+                mode={"edit"}
+                initialData={selectedPessoa || undefined}
+            />
         </>
     );
 }

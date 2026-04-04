@@ -1,8 +1,8 @@
 import { PessoasGrid } from "../components/PessoasGrid";
 import { useState } from "react";
-import { Button, Box, Paper} from "@mui/material";
+import { Button, Box, Paper } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { CreatePessoaDialog } from "../components/CreatePessoaDialog";
+import { PessoaDialog } from "../components/PessoaDialog";
 
 export function PessoasPage() {
   const [openCreate, setOpenCreate] = useState(false);
@@ -19,7 +19,7 @@ export function PessoasPage() {
       <Paper sx={{ p: 2 }}>
         <PessoasGrid />
       </Paper>
-      <CreatePessoaDialog
+      <PessoaDialog
         open={openCreate}
         onClose={() => setOpenCreate(false)}
       />

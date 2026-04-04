@@ -16,15 +16,15 @@ export function TransacoesPage() {
 
   function deleteTransacaoHandler(id: string) {
     deleteTransacao(id, {
-      onSuccess: () => showToast("Removido", "success"),
+      onSuccess: () => showToast("Transação removida com sucesso", "success"),
       onError: (err) => showToast(extractApiError(err), "error"),
     })
   }
 
   useEffect(() => {
-      if (error) {
-          showToast(extractApiError(error), "error");
-      }
+    if (error) {
+      showToast(extractApiError(error), "error");
+    }
   }, [errorUpdatedAt]);
 
   return (

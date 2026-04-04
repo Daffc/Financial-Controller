@@ -23,7 +23,7 @@ public class UpdatePessoaHandler
         if (usuario is null)
             throw new NotFoundException("Usuário não encontrado");
 
-        var pessoa = await _pessoaRepository.GetByIdWithTransacoes(request.Id!.Value, usuarioId);
+        var pessoa = await _pessoaRepository.GetByIdAndUsuarioId(request.Id!.Value, usuarioId);
         if (pessoa is null)
             throw new NotFoundException("Pessoa não encontrada");
 

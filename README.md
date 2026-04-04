@@ -89,9 +89,9 @@ erDiagram
     PESSOA {
         GUID Id PK
         string Nome "Máx 200 caracteres"
-        int Idade
+        int Idade "0 <= Idade <= 150"
         datetime DataCriacao
-        GUID UsuarioId FK "Dono dos dados"
+        GUID UsuarioId FK
     }
 
     CATEGORIA {

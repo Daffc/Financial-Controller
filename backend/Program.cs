@@ -17,6 +17,7 @@ using FinancialControllerServer.Application.Usuarios.CreateUsuario;
 using FinancialControllerServer.Application.Pessoas.CreatePessoa;
 using FinancialControllerServer.Application.Pessoas.ListPessoas;
 using FinancialControllerServer.Application.Pessoas.DeletePessoa;
+using FinancialControllerServer.Application.Pessoas.UpdatePessoa;
 using FinancialControllerServer.Application.Transacoes.CreateTransacao;
 using FinancialControllerServer.Application.Transacoes.ListTransacoes;
 using FinancialControllerServer.Application.Transacoes.DeleteTransacao;
@@ -219,6 +220,7 @@ builder.Services
     .AddScoped<CreatePessoaHandler>()
     .AddScoped<ListPessoasHandler>()
     .AddScoped<DeletePessoaHandler>()
+    .AddScoped<UpdatePessoaHandler>()
     .AddScoped<CreateTransacaoHandler>()
     .AddScoped<ListTransacoesHandler>()
     .AddScoped<DeleteTransacaoHandler>()

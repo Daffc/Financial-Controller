@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using FinancialControllerServer.Domain.Entities;
 using FinancialControllerServer.Domain.Interfaces;
 using FinancialControllerServer.Infrastructure.Persistence;
@@ -44,4 +45,10 @@ public class PessoaRepository : IPessoaRepository
             .Remove(pessoa);
     }
 
+    public async Task<Pessoa?> GetByIdWithTransacoes(Guid pessoaId, Guid usuarioId)
+    {
+        return await _dbContext.Pessoas
+            .Include(p => p.Transacoes)
+            .FirstOrDefaultAsync(p => p.Id == pessoaId && p.UsuarioId == usuarioId);
+    }
 }

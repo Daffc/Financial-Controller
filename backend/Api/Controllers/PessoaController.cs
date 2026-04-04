@@ -5,6 +5,7 @@ using FinancialControllerServer.Api.Common.Extensions;
 using FinancialControllerServer.Application.Pessoas.CreatePessoa;
 using FinancialControllerServer.Application.Pessoas.ListPessoas;
 using FinancialControllerServer.Application.Pessoas.DeletePessoa;
+using FinancialControllerServer.Application.Pessoas.UpdatePessoa;
 
 namespace FinancialControllerServer.Api.Controllers;
 
@@ -18,12 +19,14 @@ public sealed class PessoaController : ControllerBase
     private readonly CreatePessoaHandler _createPessoaHandler;
     private readonly ListPessoasHandler _listPessoasHandler;
     private readonly DeletePessoaHandler _deletePessoaHandler;
+    private readonly UpdatePessoaHandler _updatePessoaHandler;
 
-    public PessoaController(CreatePessoaHandler createPessoaHandler, ListPessoasHandler listPessoasHandler, DeletePessoaHandler deletePessoaHandler)
+    public PessoaController(CreatePessoaHandler createPessoaHandler, ListPessoasHandler listPessoasHandler, DeletePessoaHandler deletePessoaHandler, UpdatePessoaHandler updatePessoaHandler)
     {
         _createPessoaHandler = createPessoaHandler;
         _listPessoasHandler = listPessoasHandler;
         _deletePessoaHandler = deletePessoaHandler;
+        _updatePessoaHandler = updatePessoaHandler;
     }
 
     [HttpPost]
@@ -62,6 +65,21 @@ public sealed class PessoaController : ControllerBase
     {
         var usuarioId = User.GetUserId();
         await _deletePessoaHandler.Handle(id, usuarioId);
+        return NoContent();
+    }
+
+    [HttpPut("{id:guid}")]
+    [SwaggerOperation(Summary = "Modifica uma Pessoa")]
+    [SwaggerResponse(StatusCodes.Status204NoContent, "Pessoa atualizada")]
+    [SwaggerResponse(StatusCodes.Status400BadRequest, "Erro de validação", typeof(ApiErrorResponse))]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized, "Não autenticado", typeof(ApiErrorResponse))]
+    [SwaggerResponse(StatusCodes.Status404NotFound, "Pessoa não encontrada", typeof(ApiErrorResponse))]
+    [SwaggerResponse(StatusCodes.Status500InternalServerError, "Erro interno do servidor", typeof(ApiErrorResponse))]
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdatePessoaRequest request)
+    {
+        var usuarioId = User.GetUserId();
+        request.Id = id;
+        await _updatePessoaHandler.Handle(request, usuarioId);
         return NoContent();
     }
 }

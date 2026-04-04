@@ -39,26 +39,18 @@ public class CreateTransacaoHandler
         // VALIDATING VALUES
         if (request.Data is null || request.Data == default)
             throw new BadRequestException("Data é obrigatória");
-        
-        // DOMAIN ROLES
+
         if (request.Valor is null || request.Valor <= 0)
             throw new BadRequestException("Valor deve ser maior que 0");
 
-        if (pessoa.Idade < 18 && request.Tipo == TipoTransacao.RECEITA)
-            throw new BadRequestException("Pessoa menor de idade não pode ter receita");
-
-        if (!ValidCategoriaTipo(categoria.Finalidade, request.Tipo!.Value))
-            throw new BadRequestException("Categoria não permite este Tipo");
-
-
         var transacao = new Transacao(
-            request.Descricao!,
-            request.Valor.Value,
-            request.Tipo!.Value,
-            request.Data.Value,
-            pessoa.Id,
-            categoria.Id,
-            usuario.Id
+            descricao: request.Descricao!,
+            valor: request.Valor!.Value,
+            tipo: request.Tipo!.Value,
+            data: request.Data!.Value,
+            pessoa,
+            categoria,
+            usuarioId
         );
 
         await _transacaoRepository.Create(transacao);
@@ -71,17 +63,6 @@ public class CreateTransacaoHandler
             Valor = transacao.Valor,
             Tipo = transacao.Tipo,
             Data = transacao.Data
-        };
-    }
-
-    private static bool ValidCategoriaTipo(FinalidadeCategoria finalidade, TipoTransacao tipo)
-    {
-        return finalidade switch
-        {
-            FinalidadeCategoria.AMBAS => true,
-            FinalidadeCategoria.RECEITA => tipo == TipoTransacao.RECEITA,
-            FinalidadeCategoria.DESPESA => tipo == TipoTransacao.DESPESA,
-            _ => false
         };
     }
 }

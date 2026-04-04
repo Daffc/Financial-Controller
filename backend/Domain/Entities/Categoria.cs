@@ -30,4 +30,21 @@ public class Categoria
         Finalidade = finalidade;
         UsuarioId = usuarioId;
     }
+
+    private bool AllowTipo(TipoTransacao tipo)
+    {
+        return Finalidade switch
+        {
+            FinalidadeCategoria.AMBAS => true,
+            FinalidadeCategoria.RECEITA => tipo == TipoTransacao.RECEITA,
+            FinalidadeCategoria.DESPESA => tipo == TipoTransacao.DESPESA,
+            _ => false
+        };
+    }
+
+    public void ValidateTipo(TipoTransacao tipo)
+    {
+        if(!AllowTipo(tipo))
+            throw new BadRequestException("Categoria não permite este Tipo");
+    }
 }

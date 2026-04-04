@@ -9,7 +9,7 @@ public class Transacao
     // Properties
     [Key]
     public Guid Id { get; private set; }
-    public string Descricao { get; private set; }
+    public string Descricao { get; private set; } = default!;
     public decimal Valor { get; private set; }
     public TipoTransacao Tipo { get; private set; }
     public DateOnly Data { get; private set; }
@@ -23,7 +23,8 @@ public class Transacao
     public Pessoa? Pessoa { get; private set; }
     public Categoria? Categoria { get; private set; }
 
-    public Transacao(string descricao, decimal valor, TipoTransacao tipo, DateOnly data, Guid pessoaId, Guid categoriaId, Guid usuarioId)
+    private Transacao() { }
+    public Transacao(string descricao, decimal valor, TipoTransacao tipo, DateOnly data, Pessoa pessoa, Categoria categoria, Guid usuarioId)
     {
         if (string.IsNullOrWhiteSpace(descricao))
             throw new BadRequestException("Descricao é obrigatória");
@@ -37,12 +38,17 @@ public class Transacao
         if (data == default)
             throw new ArgumentException("Data é obrigatória");
 
+        if (tipo == TipoTransacao.RECEITA)
+            pessoa.ValidateCanHaveReceita();
+
+        categoria.ValidateTipo(tipo);
+
         Descricao = descricao;
         Valor = valor;
         Tipo = tipo;
         Data = data;
-        PessoaId = pessoaId;
-        CategoriaId = categoriaId;
+        PessoaId = pessoa.Id;
+        CategoriaId = categoria.Id;
         UsuarioId = usuarioId;
     }
 }

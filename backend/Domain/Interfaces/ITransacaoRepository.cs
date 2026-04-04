@@ -9,4 +9,5 @@ public interface ITransacaoRepository
     Task<List<Transacao>> ListByUsuarioId(Guid usuarioId);
     Task<Transacao?> GetByIdAndUsuarioId(Guid transacaoId, Guid usuarioId);
     void Delete(Transacao transacao);
+    Task<bool> ExistsReceitaByPessoaId(Guid pessoaId);
 }
